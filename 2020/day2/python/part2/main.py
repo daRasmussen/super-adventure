@@ -1006,11 +1006,15 @@ data = [
 
 def check(o):
     c = 0
+    # keep track of position ...
+    # Valid
+    # 1 - 3 a: abcde is valid: position 1 contains a and position 3 does not.
+    # 1 - 3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
+    # 2 - 9 c: cccccccc is invalid: both position 2 and position 9 contains c.
     for i in list(o["password"]):
-        # keep track of position ... 
         if i == o["charSet"]:
             c = c + 1
-    return True if int(o["min"]) <= c <= int(o["max"]) and c != 0 else False
+    return True if c == 1 else False
 
 
 def find(exp, arg):
