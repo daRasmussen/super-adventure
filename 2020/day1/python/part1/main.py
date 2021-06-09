@@ -205,8 +205,8 @@ res = []
 index = 0
 for nbr in arr:
     index = index + 1
-    if(index < len(arr)):
+    if index < len(arr):
         for nbr2 in arr[index:len(arr)]:
-            if(nbr + nbr2 == target):
+            if nbr + nbr2 == target:
                 res.extend([nbr, nbr2])
 print('The number is: ', res[0] * res[1])
