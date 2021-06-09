@@ -1,4 +1,5 @@
 import re
+
 data = [
     "9-10 m: mmmmnxmmmwm",
     "6-8 w: wpwwhxnv",
@@ -1002,16 +1003,19 @@ data = [
     "17-18 b: jnlntbblbbqbkqmbbb",
 ]
 
+
 def check(o):
     c = 0
-    for l in list(o["password"]):
+    for i in list(o["password"]):
         # keep track of position ... 
-        if(l == o["charSet"]):
+        if i == o["charSet"]:
             c = c + 1
     return True if int(o["min"]) <= c <= int(o["max"]) and c != 0 else False
 
-def find(exp, arg): 
+
+def find(exp, arg):
     return re.findall(exp, arg)
+
 
 test = [
     "1-3 a: abcde",
@@ -1021,17 +1025,19 @@ test = [
 
 valid = 0
 
+
 def run(arr, v):
     for p in arr:
-        minMax, charSet, password = re.split('\\s+', p)
-        min, max = find('[0-9]+', minMax)
-        charSet = charSet[:-1]
+        min_max, char_set, password = re.split('\\s+', p)
+        minimum, maximum = find('[0-9]+', min_max)
+        char_set = char_set[:-1]
         v = v + 1 if check({
-            "min": min, 
-            "max": max, 
-            "charSet": charSet, 
+            "min": minimum,
+            "max": maximum,
+            "charSet": char_set,
             "password": password
         }) else v + 0
     print(v)
+
 
 run(data, valid)
