@@ -205,10 +205,10 @@ res = []
 index = 0
 for nbr in arr:
     index = index + 1
-    if(index < len(arr)):
+    if index < len(arr):
         for nbr2 in arr[index:len(arr)]:
             index2 = index + 2
             for nbr3 in arr[index2:len(arr)]:
-                if(nbr + nbr2 + nbr3 == target):
+                if nbr + nbr2 + nbr3 == target:
                     res.extend([nbr, nbr2, nbr3])
-print('The number is: ', res[0] * res[1]* res[2])
+print('The number is: ', res[0] * res[1] * res[2])
