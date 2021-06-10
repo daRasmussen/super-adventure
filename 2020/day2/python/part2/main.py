@@ -1003,18 +1003,39 @@ data = [
     "17-18 b: jnlntbblbbqbkqmbbb",
 ]
 
+def test(o, i, t):
+
+
+def fix(index, password):
+    arr = list(password)
+    last = len(arr)
+    if index >= 0 and index < last:
+        if index == 0:
+            return index + 1
+        elif index == last:
+            return index - 1
+        else:
+            return index
+    else:
+        return False
+        
 
 def check(o):
-    c = 0
+    tests = []
+    c = []
     # keep track of position ...
     # Valid
     # 1 - 3 a: abcde is valid: position 1 contains a and position 3 does not.
     # 1 - 3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
     # 2 - 9 c: cccccccc is invalid: both position 2 and position 9 contains c.
-    for i in list(o["password"]):
-        if i == o["charSet"]:
-            c = c + 1
-    return True if c == 1 else False
+    for i, x in enumerate(list(o["password"])):
+        if x == o["charSet"]:
+            c.append({
+                'index': fix(i, o["password"]),
+                'value': x
+                })
+    return True
+    #return True if c == 1 else False
 
 
 def find(exp, arg):
