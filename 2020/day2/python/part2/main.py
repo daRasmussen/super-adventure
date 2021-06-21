@@ -14,10 +14,10 @@ def validate():
     for min_, max_, char, password in load_data():
         if password[min_] == char:
             if password[max_] != char:
-                valid = valid + 1
+                valid += 1
         if password[max_] == char:
             if password[min_] != char:
-                valid = valid + 1
+                valid += 1
     print('valid: ', valid)
 
 
