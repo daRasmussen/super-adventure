@@ -1,28 +1,22 @@
-# square = .
-# tree = #
+import math
 
 right = 3
-down = 1
-pos = [0, 0]
 
 
-def get_char(string, index):
-    if index < len(string):
-        print('@index: ', index)
-        return string[index]
+def get_char(s, y):
+    if y * right < len(s):
+        return s[right * y]
     else:
-        rest = int(index) % len(string) + 2
-        print('@index: ', rest)
-        # print('rest: ', rest, 'index: ', index, 'len: ', len(string))
-        return string[rest]
+        p = right * y
+        q = math.floor(y / right)
+        z = len(s) - 1
+        return s[p - q * z]
 
 
 def load_data():
     with open("test.txt", "r") as data:
-        for line in data:
-            pos[0] += right
-            pos[1] += down
-            yield get_char(line, pos[0])
+        for line, index in data:
+            yield get_char(line.strip(), index)
 
 
 def validate():
