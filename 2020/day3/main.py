@@ -6,18 +6,23 @@ down = 1
 pos = [0, 0]
 
 
+def get_char(string, index):
+    if index < len(string):
+        print('@index: ', index)
+        return string[index]
+    else:
+        rest = int(index) % len(string) + 2
+        print('@index: ', rest)
+        # print('rest: ', rest, 'index: ', index, 'len: ', len(string))
+        return string[rest]
+
+
 def load_data():
-    with open("sandbox.txt", "r") as data:
+    with open("test.txt", "r") as data:
         for line in data:
             pos[0] += right
             pos[1] += down
-            print(pos)
-            if pos[0] - 1 < len(line):
-                yield line[pos[0]]
-            elif pos[0] > len(line):
-                yield line[-1]
-            elif len(line) == 0:
-                break
+            yield get_char(line, pos[0])
 
 
 def validate():
