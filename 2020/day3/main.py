@@ -5,12 +5,14 @@ step = 3
 
 def get_char(s, i):
     if i * step < len(s):
+        print(step * i, i)
         return s[step * i]
     else:
         p = step * i
-        q = math.floor(i / step)
+        q = math.floor(p / len(s))
         z = len(s) - 1
-        return s[p - q * z]
+        print(p % z, i)
+        return s[p % z]
 
 
 def load_data():
@@ -27,7 +29,6 @@ def validate():
             squares += 1
         elif c == '#':
             trees += 1
-
     print('squares: ', squares, 'trees: ', trees)
 
 
