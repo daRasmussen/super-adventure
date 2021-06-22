@@ -1,4 +1,4 @@
-step = 3
+step = 5
 
 
 def get_char(s, i):
@@ -9,7 +9,7 @@ def get_char(s, i):
 
 
 def load_data():
-    with open("map.txt", "r") as d:
+    with open("test.txt", "r") as d:
         for index, line in enumerate(d):
             yield get_char(line.strip(), index)
 
@@ -22,6 +22,6 @@ def validate():
             squares += 1
         elif c == '#':
             trees += 1
-
+    print(trees)
 
 validate()
