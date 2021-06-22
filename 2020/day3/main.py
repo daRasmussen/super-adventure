@@ -1,36 +1,33 @@
-import math
-
 step = 3
+
 
 def get_char(s, i):
     if i * step < len(s):
-        print(step * i, i, s[step * i])
+        # print(step * i, i, s[step * i])
         return s[step * i]
     else:
         p = step * i
-        q = math.floor(p / len(s))
         z = len(s) - 1
         r = p % z
-        c = math.floor(i / step)
-
-        # print(r, i, s[r], c)
-        # return s[r]
 
         if r % 2 == 0:
-            print(r - 1, i, s[r - 1], c)
-            return s[r - 1]
+            if r != 0:
+                # print('d: ', r - 1, i, s[r - 1])
+                return s[r - 1]
+            else:
+                # print('a: ', r + 1, i, s[r + 1])
+                return s[r + 1]
         else:
-            print(r, i, s[r], c)
-            return s[r]
+            if r <= len(s) / 2:
+                # print('t: ', r, i, s[r])
+                return s[r]
+            else:
+                # print('r: ', r - 2, i, s[r - 2])
+                return s[r - 2]
 
-# calc index
-# calc x and y pos ...
-# pos x = row * step
 
-# get_char takes a index
-# returns s[i]
 def load_data():
-    with open("test.txt", "r") as d:
+    with open("map.txt", "r") as d:
         for index, line in enumerate(d):
             yield get_char(line.strip(), index)
 
