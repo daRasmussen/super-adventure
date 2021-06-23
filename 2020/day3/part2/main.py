@@ -1,19 +1,16 @@
-def get_char(s, row_index, right, down):
-
-    p = right * down
-    z = len(s)
-    r = p % z
-
-    return s[r]
+def translate(nbr):
+    return nbr - 1
 
 
 def investigate(lines, right, down):
     index = 0
     chars = []
     while True:
-        line = lines[index].strip()
-        if down == 1:
-            chars.append(line[right])
+        line = lines[down].strip()
+        p = right * down + index
+        z = len(line)
+        r = p % z
+        chars.append(line[r])
         index += 1
         if index == len(lines):
             break
@@ -22,7 +19,7 @@ def investigate(lines, right, down):
 
 def load_data(right, down):
     with open("test.txt", "r") as d:
-        yield investigate(d.readlines(), right, down)
+        yield investigate(d.readlines(), translate(right), translate(down))
 
 
 def find_trees(r, d):
