@@ -13,7 +13,6 @@ def investigate(lines, right, down):
     while True:
         line = lines[index].strip()
         if down == 1:
-            print('index: ', index + right)
             chars.append(line[right])
         index += 1
         if index == len(lines):
