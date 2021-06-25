@@ -1,5 +1,15 @@
+"""
+This is a docstring in python
+"""
+
+
 def translate(nbr):
     return nbr - 1
+
+
+"""
+This is a docstring in python
+"""
 
 
 def investigate(lines, right, down):
