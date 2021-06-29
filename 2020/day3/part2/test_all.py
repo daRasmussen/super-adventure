@@ -42,3 +42,7 @@ def all_slopes():
     slope_three()
     slope_four()
     slope_five()
+
+
+def test_all_slopes():
+    all_slopes()
