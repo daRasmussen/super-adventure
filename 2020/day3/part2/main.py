@@ -16,8 +16,11 @@ def investigate(lines, right, down):
     index = 0
     chars = []
     while True:
+        if down == 1:
+            p = right * index
+        elif down != 1:
+            p = right * index
         line = lines[down].strip()
-        p = right * down + index
         z = len(line)
         r = p % z
         chars.append(line[r])
@@ -29,7 +32,7 @@ def investigate(lines, right, down):
 
 def load_data(right, down):
     with open("test.txt", "r") as d:
-        yield investigate(d.readlines(), translate(right), translate(down))
+        yield investigate(d.readlines(), right, down)
 
 
 def find_trees(r, d):
@@ -57,12 +60,16 @@ def multiply(arr):
 
 def validate(search):
     re = fill_re(search, [])
-    print(re, multiply(re))
+    print('validates: ', re, multiply(re))
+    return {
+        're': re,
+        'multiply': multiply(re)
+    }
 
 
 slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
-
+print(fill_re([[1, 1]], [])[0])
 validate(slopes)
-
+# print('Validate: ', validate([[1, 1]]))
 ans = [2, 7, 3, 4, 2]
-print(ans, multiply(ans))
+print('expected:  ', ans, multiply(ans))

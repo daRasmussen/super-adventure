@@ -1,4 +1,4 @@
-step = 5
+step = 1
 
 
 def get_char(s, i):
@@ -23,5 +23,6 @@ def validate():
         elif c == '#':
             trees += 1
     print(trees)
+
 
 validate()
