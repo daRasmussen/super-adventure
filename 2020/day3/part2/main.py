@@ -8,26 +8,40 @@ Takes lines and right and down, fills chars with found characters.
 """
 
 
+def down_one(lines, right, index):
+    line = lines[index].strip()
+    p = right * index
+    z = len(line)
+    r = p % z
+    return line[r]
+
+
+def down_x(lines, right, index, down):
+    # print('index: ', index, 'down: ', down)
+    print(index * down, (index * down) / down)
+    line = lines[down].strip()
+    p = right * down
+    z = len(line)
+    r = p % z
+    return line[r]
+
+
 def investigate(lines, right, down):
     index = 0
     chars = []
-    p = -1
-    line = " "
+    count = 0
     while True:
         if down == 1:
-            p = right * index
-            line = lines[index].strip()
+            chars.append(down_one(lines, right, index))
         else:
-            c = index * down
-            ll = len(lines)
-            lo = 0 < c < ll
-            p = right * c
-            if lo:
-                line = lines[c].strip()
-                print(line)
-        z = len(line)
-        r = p % z
-        chars.append(line[r])
+            count += 1
+            if count == down:
+                line = lines[index].strip()
+                p = right - 1
+                z = len(line)
+                r = p % z
+                chars.append(line[r])
+                count = 0
         index += 1
         if index == len(lines):
             break
@@ -35,7 +49,7 @@ def investigate(lines, right, down):
 
 
 def load_data(right, down):
-    with open("test.txt", "r") as d:
+    with open("map.txt", "r") as d:
         yield investigate(d.readlines(), right, down)
 
 
@@ -71,8 +85,11 @@ def validate(search):
     }
 
 
-# 81675000 is to low
-# 2123550000 is to high
+# 81 675 000 is to low
+# 898 425 000 is to low
+
+# 2 123 550 000 is to high
+# 2 246 062 500 is to high
 
 slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
 validate(slopes)
