@@ -7,6 +7,8 @@ Advent of Code 2020
 Takes lines and right and down, fills chars with found characters.
 """
 
+fil_name = 'map.txt'
+
 
 def down_one(lines, right, index):
     line = lines[index].strip()
@@ -20,7 +22,9 @@ def trim(target, limit):
     while True:
         if target > limit:
             target = target - limit
-        if target <= limit:
+        elif target == limit:
+            target = 0
+        elif target < limit:
             break
     return target
 
@@ -28,21 +32,18 @@ def trim(target, limit):
 def investigate(lines, right, down):
     row = 0
     chars = []
-    if down > 1:
-        chars.append('.')
-        chars.append('.')
     while True:
         if down == 1:
             chars.append(down_one(lines, right, row))
         elif row > 1:
             target = int(row / down) if row % down == 0 else row
             if row != target:
-                line = lines[row]
-                position = trim(target, len(line) - 1)
+                line = lines[row].strip()
+                position = trim(target, len(line))
+                print('row: ', row, 'target: ', target, 'length: ', len(line), 'position: ', position, 'char: ',
+                      line[position])
                 c = line[position]
                 chars.append(c)
-            else:
-                chars.append('.')
         row += 1
         if row == len(lines):
             break
@@ -50,7 +51,7 @@ def investigate(lines, right, down):
 
 
 def load_data(right, down):
-    with open("map.txt", "r") as d:
+    with open(fil_name, "r") as d:
         yield investigate(d.readlines(), right, down)
 
 
@@ -77,14 +78,14 @@ def multiply(arr):
     return s
 
 
-def inRange(number):
-    return True if 898425000 > number > 2123550000 else False
+def in_range(number):
+    return True if 2123550000 > number > 898425000 else False
 
 
 def validate(search):
     re = fill_re(search, [])
     print('validates: ', re, multiply(re))
-    print('in range: ', inRange(multiply(re)))
+    print('in range: ', in_range(multiply(re)))
     return {
         're': re,
         'multiply': multiply(re)
@@ -97,7 +98,7 @@ def validate(search):
 # 285862500  is fail
 # 1388475000 is fail
 # 1388475000 is fail
-
+# 1143450000 is fail
 
 # 2123550000 is to high
 # 2246062500 is to high
@@ -106,3 +107,24 @@ slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
 validate(slopes)
 ans = [2, 7, 3, 4, 2]
 print('expected:  ', ans, multiply(ans))
+
+
+def check2(number):
+    failed = [
+        81675000,
+        898425000,
+        285862500,
+        1388475000,
+        1388475000,
+        1143450000,
+        2123550000,
+        2246062500,
+    ]
+    for nbr in failed:
+        if nbr == number:
+            print('The number: %d was found in list' % number)
+        else:
+            print('The number: %d was NOT found in list' % number)
+
+
+check2(1592662500)
