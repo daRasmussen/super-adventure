@@ -12,18 +12,19 @@ def investigate(lines, right, down):
     index = 0
     chars = []
     p = -1
-    line = ""
+    line = " "
     while True:
         if down == 1:
             p = right * index
             line = lines[index].strip()
         else:
-            # TODO: ??????
-            d = (down + index)
-            p = right * d
-            print(right, down, index)
-            if d < len(lines[index]):
-                line = lines[down].strip()
+            c = index * down
+            ll = len(lines)
+            lo = 0 < c < ll
+            p = right * c
+            if lo:
+                line = lines[c].strip()
+                print(line)
         z = len(line)
         r = p % z
         chars.append(line[r])
@@ -71,10 +72,9 @@ def validate(search):
 
 
 # 81675000 is to low
-# slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
-slopes = [[1, 2]]
-# print(fill_re([[1, 1]], [])[0])
+# 2123550000 is to high
+
+slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
 validate(slopes)
-# print('Validate: ', validate([[1, 1]]))
 ans = [2, 7, 3, 4, 2]
 print('expected:  ', ans, multiply(ans))
