@@ -16,34 +16,35 @@ def down_one(lines, right, index):
     return line[r]
 
 
-def down_x(lines, right, index, down):
-    # print('index: ', index, 'down: ', down)
-    print(index * down, (index * down) / down)
-    line = lines[down].strip()
-    p = right * down
-    z = len(line)
-    r = p % z
-    return line[r]
+def trim(target, limit):
+    while True:
+        if target > limit:
+            target = target - limit
+        if target <= limit:
+            break
+    return target
 
 
 def investigate(lines, right, down):
-    index = 0
+    row = 0
     chars = []
-    count = 0
+    if down > 1:
+        chars.append('.')
+        chars.append('.')
     while True:
         if down == 1:
-            chars.append(down_one(lines, right, index))
-        else:
-            count += 1
-            if count == down:
-                line = lines[index].strip()
-                p = right - 1
-                z = len(line)
-                r = p % z
-                chars.append(line[r])
-                count = 0
-        index += 1
-        if index == len(lines):
+            chars.append(down_one(lines, right, row))
+        elif row > 1:
+            target = int(row / down) if row % down == 0 else row
+            if row != target:
+                line = lines[row]
+                position = trim(target, len(line) - 1)
+                c = line[position]
+                chars.append(c)
+            else:
+                chars.append('.')
+        row += 1
+        if row == len(lines):
             break
     return chars
 
@@ -76,20 +77,30 @@ def multiply(arr):
     return s
 
 
+def inRange(number):
+    return True if 898425000 > number > 2123550000 else False
+
+
 def validate(search):
     re = fill_re(search, [])
     print('validates: ', re, multiply(re))
+    print('in range: ', inRange(multiply(re)))
     return {
         're': re,
         'multiply': multiply(re)
     }
 
 
-# 81 675 000 is to low
-# 898 425 000 is to low
+# 81675000 is to low
+# 898425000 is to low
 
-# 2 123 550 000 is to high
-# 2 246 062 500 is to high
+# 285862500  is fail
+# 1388475000 is fail
+# 1388475000 is fail
+
+
+# 2123550000 is to high
+# 2246062500 is to high
 
 slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
 validate(slopes)
