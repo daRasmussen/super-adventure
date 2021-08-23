@@ -82,7 +82,11 @@ def read(file_name):
             results.append(int(run(line.strip())['seat ID']))
     r = numpy.array(results, dtype=int)
     r.sort()
-    print(r)
+    # print(r)
+    for i, v in enumerate(r):
+        if v - i != 7:
+            print('index: ', i, 'seat id: ', v)
+            break
 
 
 class Tests(unittest.TestCase):
