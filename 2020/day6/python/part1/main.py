@@ -3,6 +3,17 @@ import unittest
 unique = ['a', 'b', 'c']
 
 
+def inc(g, s):
+    tmp = []
+    for i in g:
+        line = list(i)
+        for c in line:
+            if tmp.count(c) == 0:
+                tmp.append(c)
+                s = s + 1
+    return s
+
+
 def run(path):
     s = 0
     g = []
@@ -10,28 +21,15 @@ def run(path):
     with open(path, "r") as data:
         for line in data:
             l = line.strip()
-            if l != '':
+            if '' != l:
                 t.append(l)
             else:
                 g.append(t)
                 t = []
         if len(t) != 0:
             g.append(t)
-        has_a = False
-        has_b = False
-        has_c = False
         for p in g:
-            if len(p) == 1:
-                if p[0].find('a') and has_a is False:
-                    s = s + 1
-                    has_a = True
-                if p[0].find('b') and has_b is False:
-                    s = s + 1
-                    has_b = True
-                if p[0].find('c') and has_c is False:
-                    s = s + 1
-                    has_c = True
-                    
+            s = inc(p, s)
     return s
 
 
@@ -44,4 +42,5 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    print(run('data.txt'))
