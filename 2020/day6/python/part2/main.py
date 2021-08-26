@@ -1,29 +1,26 @@
 import unittest
 
 
-def parse2(tmp, ref):
-    s = sum(range(1, ref))
+def parse2(tmp, number_of_votes):
     db = {}
     for item in tmp:
         c = item[0]
-        c_n = c + '_col'
-        col = item[1][0]
-        db[c_n] = sum(range(1, col + 1), 0)
-    res = list(filter(lambda x: x == s, db.values()))
-    return res[0] // s if res else 0
+        if c not in db:
+            db[c] = 1
+        else:
+            db[c] = db[c] + 1
+    res = list(filter(lambda x: x == number_of_votes, db.values()))
+    return sum(res)
 
 
 def inc2(group):
-    if len(group) == 1:
-        return len(group[0])
-    else:
-        target = ''.join(group)
-        tmp = []
-        for col, person in enumerate(group):
-            for row, vote in enumerate(person):
-                if target.count(vote) > 1:
-                    tmp.append([vote, [col, row]])
-        return parse2(tmp, len(group)) if tmp else 0
+    target = ''.join(group)
+    tmp = []
+    for col, person in enumerate(group):
+        for row, vote in enumerate(person):
+            if target.count(vote) > 1:
+                tmp.append([vote, [col, row]])
+    return parse2(tmp, len(group))
 
 
 def run(path):
@@ -50,14 +47,16 @@ class MyTestCase(unittest.TestCase):
     def test(self):
         path = 'test.txt'
         s = run(path)
-        self.assertEqual(6, s)
+        self.assertEqual(21, s)
 
 
 if __name__ == '__main__':
-    # unittest.main()
+    unittest.main()
+    # 10733 is to high
+    # 3225 is to high
     # guessed 3130 is to HIGH
     # guessed 42
     # guessed 47
     # guessed 454
-    print(run('test.txt'))
-    print(run('data.txt'))
+    # print(run('test.txt'))
+    # print(run('data.txt'))
