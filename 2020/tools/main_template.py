@@ -6,6 +6,9 @@ import sys
 
 def run(path):
     print('RUN', path)
+    with open(path, "r") as data:
+        lines = data.readlines()
+        print(lines)
     return path
 
 
