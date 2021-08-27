@@ -1,48 +1,32 @@
 import unittest
 
 
-def parse2(tmp, number_of_votes):
-    db = {}
-    for item in tmp:
-        c = item[0]
-        if c not in db:
-            db[c] = 1
-        else:
-            db[c] = db[c] + 1
-    res = list(filter(lambda x: x == number_of_votes, db.values()))
-    return sum(res)
-
-
-def inc2(group):
-    target = ''.join(group)
-    tmp = []
-    for col, person in enumerate(group):
-        for row, vote in enumerate(person):
-            if target.count(vote) > 1:
-                tmp.append([vote, [col, row]])
-    return parse2(tmp, len(group))
-
-
 def run(path):
-    s = 0
-    g = []
-    t = []
     with open(path, "r") as data:
-        for line in data:
-            li = line.strip()
-            if '' != li:
-                t.append(li)
+        lines = data.readlines()
+        groups = []
+        tmp = []
+        grand = []
+        for line in lines:
+            if line != '\n':
+                tmp.append(line)
             else:
-                g.append(t)
-                t = []
-        if len(t) != 0:
-            g.append(t)
-        for p in g:
-            s = s + inc2(p)
-    return s
+                groups.append(tmp)
+                tmp = []
+        for group in groups:
+            voters = len(group)
+            db = {}
+            for person in group:
+                for vote in person:
+                    if vote in db:
+                        db[vote] = db[vote] + person.count(vote)
+                    else:
+                        db[vote] = person.count(vote)
+            for record in db.keys():
+                grand.append(1 if db[record] == voters and record != '\n' else 0)
+        return sum(grand)
 
 
-# F9 breakpoint
 class MyTestCase(unittest.TestCase):
     def test(self):
         path = 'test.txt'
@@ -51,12 +35,16 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
     # 10733 is to high
     # 3225 is to high
     # guessed 3130 is to HIGH
+
+    # guessed 3039
+    # gussed 3036
+
     # guessed 42
     # guessed 47
     # guessed 454
-    # print(run('test.txt'))
-    # print(run('data.txt'))
+    print(run('test.txt'))
+    print(run('data.txt'))
