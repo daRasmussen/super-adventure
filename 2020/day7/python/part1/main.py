@@ -3,7 +3,7 @@ import unittest
 import getopt
 import sys
 
-target = 'gold'
+target = 'shiny gold'
 
 
 def run(path):
@@ -16,43 +16,40 @@ def run(path):
             bags_inside = [x for x in line.split("contain")[1] if not x.isdigit() if not x == "."]
             raw_colors = [
                 x for x in "".join(bags_inside).strip().split(" ")
-                if not x == 'bag'
-                if not x == 'bags'
-                if not x == 'bag,'
-                if not x == 'bags,'
-                if not x == 'no'
-                if not x == 'other'
             ]
             db[index] = {
-                'line '+str(index + 1): line,
+                'line ' + str(index + 1): line,
                 'color': " ".join(line.split(" ")[0:2]),
                 'contains': {
                     'text': "".join(bags_inside).strip(),
                     'raw_colors': raw_colors,
-                    'colors': [
-                        raw_colors[1],
-                        raw_colors[len(raw_colors) - 1]
-                    ] if raw_colors else []
+                    'colors': [x.replace(', ', '').strip() for x in " ".join(raw_colors).split("bags") if not x == '']
                 }
             }
         for key, value in db.items():
             color = value["color"]
             contains_colors = value["contains"]["colors"]
-            for contains_color in contains_colors:
-                if contains_color == target:
-                    if not res.count(color):
-                        res.append(color)
-        for key, value in db.items():
-            color2 = value["color"]
-            contains_colors2 = value["contains"]["colors"]
-            for contain_color2 in contains_colors2:
-                for res_color in res:
-                    if res_color.count(" ") and res_color.split(" ")[1] == contain_color2:
-                        if not res.count(color2):
-                            res.append(color2)
 
-    print(res, len(res))
-    return len(res)
+            for contain_color in contains_colors:
+                if contain_color == target:
+                    if len(res) == 0:
+                        res.append(color)
+                    elif res.count(color) == 0:
+                        res.append(color)
+            # for key, value in db.items():
+            #     color2 = value["color"]
+            #     contains_colors2 = "".join(value["contains"]["raw_colors"])
+            #     for contain_color2 in contains_colors2:
+            #         for res_color in res:
+            #             if contain_color2 == res_color:
+            #                 if res.count(color2) == 0:
+            #                     res.append(color2)
+        # 19
+        # 14
+        # 576
+        print(res)
+        print(len(res))
+        return len(res)
 
 
 class Cases(unittest.TestCase):
