@@ -23,29 +23,30 @@ def run(path):
                 'contains': {
                     'text': "".join(bags_inside).strip(),
                     'raw_colors': raw_colors,
-                    'colors': [x.replace(', ', '').strip() for x in " ".join(raw_colors).split("bags") if not x == '']
+                    'colors': [
+                        x.replace(", ", "").replace("s ", "").strip() for x in " ".join(raw_colors).split("bag")
+                        if not x == ''
+                    ]
                 }
             }
         for key, value in db.items():
             color = value["color"]
             contains_colors = value["contains"]["colors"]
-
             for contain_color in contains_colors:
                 if contain_color == target:
-                    if len(res) == 0:
+                    if res.count(color) == 0:
                         res.append(color)
-                    elif res.count(color) == 0:
-                        res.append(color)
-            # for key, value in db.items():
-            #     color2 = value["color"]
-            #     contains_colors2 = "".join(value["contains"]["raw_colors"])
-            #     for contain_color2 in contains_colors2:
-            #         for res_color in res:
-            #             if contain_color2 == res_color:
-            #                 if res.count(color2) == 0:
-            #                     res.append(color2)
+        for key, value in db.items():
+            color2 = value["color"]
+            contains_colors2 = value["contains"]["colors"]
+            for contain_color2 in contains_colors2:
+                for res_color in res:
+                    if contain_color2 == res_color:
+                        if res.count(color2) == 0:
+                            res.append(color2)
         # 19
         # 14
+        # 49
         # 576
         print(res)
         print(len(res))
