@@ -40,19 +40,20 @@ def run(path):
         for key, value in db.items():
             color2 = value["color"]
             contains_colors2 = set([x for x in value["contains"]["colors"] if not x == 's'])
-            # bright white and muted yellow
-            print(not set(res).difference(contains_colors2))
-            if not set(res).difference(contains_colors2):
-                print(res)
-                print(contains_colors2)
-                if res.count(color) == 0:
-                    res2.append(color2)
+            intersect = set(res).intersection(contains_colors2)
+            print('intersect: ', intersect, len(intersect), len(contains_colors2))
+            if intersect and len(intersect) == len(contains_colors2):
+                res2.append(color2)
         # 19
+        # 6
+        # 9
+        # 26
         # 14
         # 49
         # 576
-        print(res, res2)
-        print(len(res) + len(res2))
+        print(res)
+        print(res + res2)
+        print(len(res + res2))
         return len(res + res2)
 
 
