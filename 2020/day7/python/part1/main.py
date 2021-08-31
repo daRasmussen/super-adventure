@@ -5,55 +5,53 @@ import sys
 
 target = 'shiny gold'
 
+test_graph = {
+    'Amin': {'Wasim', 'Nick', 'Mike'},
+    'Wasim': {'Imran', 'Amin'},
+    'Imran': {'Wasim', 'Faras'},
+    'Faras': {'Imran'},
+    'Mike': {'Amin'},
+    'Nick': {'Amin'}
+}
+
+my_graph = {
+    'light red': {'bright white', 'muted yellow'},
+    'dark orange': {'bright white', 'muted yellow'},
+    'bright white': {'shiny gold'},
+    'muted yellow': {'shiny gold', 'faded blue'},
+    'shiny gold': {'bright white', 'muted yellow'},
+    'dark olive': {'faded blue', 'dotted black'},
+    'vibrant plum': {'faded blue', 'dotted black'},
+    'faded blue': {'vibrant plum', 'dark olive'},
+    'dotted black': {'dark olive'}
+}
+
+
+def bfs(graph, start):
+    visited = []
+    queue = [start]
+
+    while queue:
+        node = queue.pop(0)
+        if node not in visited:
+            visited.append(node)
+            neighbours = graph[node]
+            for neighbour in neighbours:
+                queue.append(neighbour)
+    return visited
+
 
 def run(path):
     print('RUN', path)
+    print(bfs(test_graph, 'Amin'))
+    print(bfs(my_graph, 'bright white'))
+    print(bfs(my_graph, 'muted yellow'))
     db = {}
     with open(path, "r") as data:
-        res = []
-        # res2 = []
         lines = data.readlines()
-        for index, line in enumerate(lines):
-            bags_inside = [x for x in line.split("contain")[1] if not x.isdigit() if not x == "."]
-            raw_colors = [
-                x for x in "".join(bags_inside).strip().split(" ")
-            ]
-            db[index] = {
-                'line ' + str(index + 1): line,
-                'color': " ".join(line.split(" ")[0:2]),
-                'contains': {
-                    'text': "".join(bags_inside).strip(),
-                    'raw_colors': raw_colors,
-                    'colors': [
-                        x.replace(", ", "").replace("s ", "").strip() for x in " ".join(raw_colors).split("bag")
-                        if not x == ''
-                    ]
-                }
-            }
-        for key, value in db.items():
-            color = value["color"]
-            contains_colors = value["contains"]["colors"]
-            for contain_color in contains_colors:
-                if contain_color == target:
-                    if res.count(color) == 0:
-                        print('id: ', key + 1, 'outside color: ', color)
-                        res.append(color)
-        for key, value in db.items():
-            color2 = value["color"]
-            contains_colors2 = set([x for x in value["contains"]["colors"] if not x == 's'])
-            intersection = set(res).intersection(contains_colors2)
-            if intersection:
-                print(res, intersection)
-                res.append(color2)
-        # 19
-        # 6
-        # 9
-        # 26
-        # 14
-        # 49
-        # 576
-        print(len(res))
-        return len(res)
+
+
+# 19, 6, 9, 26, 14, 49, 576
 
 
 class Cases(unittest.TestCase):
