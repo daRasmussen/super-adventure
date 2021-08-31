@@ -11,7 +11,7 @@ def run(path):
     db = {}
     with open(path, "r") as data:
         res = []
-        res2 = []
+        # res2 = []
         lines = data.readlines()
         for index, line in enumerate(lines):
             bags_inside = [x for x in line.split("contain")[1] if not x.isdigit() if not x == "."]
@@ -36,14 +36,15 @@ def run(path):
             for contain_color in contains_colors:
                 if contain_color == target:
                     if res.count(color) == 0:
+                        print('id: ', key + 1, 'outside color: ', color)
                         res.append(color)
         for key, value in db.items():
             color2 = value["color"]
             contains_colors2 = set([x for x in value["contains"]["colors"] if not x == 's'])
-            intersect = set(res).intersection(contains_colors2)
-            print('intersect: ', intersect, len(intersect), len(contains_colors2))
-            if intersect and len(intersect) == len(contains_colors2):
-                res2.append(color2)
+            intersection = set(res).intersection(contains_colors2)
+            if intersection:
+                print(res, intersection)
+                res.append(color2)
         # 19
         # 6
         # 9
@@ -51,10 +52,8 @@ def run(path):
         # 14
         # 49
         # 576
-        print(res)
-        print(res + res2)
-        print(len(res + res2))
-        return len(res + res2)
+        print(len(res))
+        return len(res)
 
 
 class Cases(unittest.TestCase):
