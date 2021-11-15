@@ -1,92 +1,39 @@
-import unittest
-
-import getopt
-import sys
+import re
+from collections import deque
 
 target = 'shiny gold'
 
-test_graph = {
-    'Amin': {'Wasim', 'Nick', 'Mike'},
-    'Wasim': {'Imran', 'Amin'},
-    'Imran': {'Wasim', 'Faras'},
-    'Faras': {'Imran'},
-    'Mike': {'Amin'},
-    'Nick': {'Amin'}
-}
-
-my_graph = {
-    'light red': {'bright white', 'muted yellow'},
-    'dark orange': {'bright white', 'muted yellow'},
-    'bright white': {'shiny gold'},
-    'muted yellow': {'shiny gold', 'faded blue'},
-    'shiny gold': {'bright white', 'muted yellow'},
-    'dark olive': {'faded blue', 'dotted black'},
-    'vibrant plum': {'faded blue', 'dotted black'},
-    'faded blue': {'vibrant plum', 'dark olive'},
-    'dotted black': {'dark olive'}
-}
+db = {}
 
 
 def bfs(graph, start):
-    visited = []
-    queue = [start]
-
+    visited, queue = set(), deque([start])
     while queue:
-        node = queue.pop(0)
+        node = queue.popleft()
         if node not in visited:
-            visited.append(node)
-            neighbours = graph[node]
-            for neighbour in neighbours:
-                queue.append(neighbour)
+            print("Now visiting", node)
+        visited.add(node)
+        for neighbor in graph[node]:
+            queue.append(neighbor)
     return visited
 
 
-def run(path):
-    print('RUN', path)
-    print(bfs(test_graph, 'Amin'))
-    print(bfs(my_graph, 'bright white'))
-    print(bfs(my_graph, 'muted yellow'))
-    db = {}
-    with open(path, "r") as data:
-        lines = data.readlines()
+def create_graph(lines):
+    for line in lines:
+        parts = line.strip().split("contain")
+        parent = parts[0]
+        children = parts[1]
+        key = parent.split(" bags")[:1]
+        tmp = [x for x in children.split(", ")]
+        test = re.match("", tmp[0][0])
+        db[str(key)] = tmp
 
 
-# 19, 6, 9, 26, 14, 49, 576
-
-
-class Cases(unittest.TestCase):
-    def test(self):
-        self.assertEqual(4, run('test.txt'))
-
-
-def main1():
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "ht:v:", ["help", "tests", "verbose"])
-    except getopt.GetoptError as err:
-        print(err)
-        sys.exit(2)
-    verbose = False
-    tests = False
-    for o, a in opts:
-        if o in ("-v", "--verbose"):
-            verbose = a if a else True
-            print('Verbose is: ', verbose)
-        elif o in ("-h", "--help"):
-            print('main.py -v <bool>')
-            print('main.py -t <bool>')
-            print('main.py -h')
-            print('main.py --verbose')
-            print('main.py --tests')
-            print('main.py --help')
-            sys.exit()
-        elif o in ("-t", '--tests'):
-            tests = a if a else True
-            if tests:
-                run('test.txt')
-            sys.exit()
-    run('data.txt')
-    unittest.main()
+def main():
+    with open("test.txt", "r") as data:
+        create_graph(data.readlines())
 
 
 if __name__ == '__main__':
-    main1()
+    main()
+    bfs(db, target)
