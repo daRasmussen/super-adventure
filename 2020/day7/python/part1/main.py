@@ -3,7 +3,20 @@ from collections import deque
 
 target = 'shiny gold'
 
-db = {}
+db = {
+    "no other bags": []
+}
+
+
+def hasPath(graph, src, dst):
+    que = deque([src])
+    while len(que) > 0:
+        current = que.popleft()
+        if current == dst:
+            return True
+        for neighbour in graph[current]:
+            que.append(neighbour)
+    return False
 
 
 def bfs(graph, start):
@@ -24,9 +37,15 @@ def create_graph(lines):
         parent = parts[0]
         children = parts[1]
         key = parent.split(" bags")[:1]
-        tmp = [x for x in children.split(", ")]
-        test = re.match("", tmp[0][0])
-        db[str(key)] = tmp
+        tmp = [x.strip() for x in children.split(", ")]
+        tmp = [re.match("(\w+).(\w+).(\w+)", x).groups() for x in tmp]
+        res = []
+        for item in tmp:
+            if not item[0].isnumeric():
+                res.append(f"{item[0]} {item[1]} {item[2]}")
+            else:
+                res.append(f"{item[1]} {item[2]}")
+        db[str(key[0])] = res
 
 
 def main():
@@ -37,3 +56,4 @@ def main():
 if __name__ == '__main__':
     main()
     bfs(db, target)
+    print(hasPath(db, target, target))
