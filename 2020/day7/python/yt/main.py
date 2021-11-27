@@ -1,4 +1,4 @@
-with open('data_part1.txt') as file:
+with open('data_part2.txt') as file:
     data = file.readlines()
     data = [ line.strip() for line in data ]
 
@@ -26,3 +26,27 @@ def get_num_bags(color):
 
 colors = get_num_bags('shiny gold')
 print(len(colors))
+
+# part2 
+def get_bag_count(color):
+    rule = ''
+    for line in data:
+        if line[:line.index(' bags')] == color:
+            rule = line
+
+    if 'no' in rule:
+        return 1
+
+    rule = rule[rule.index('contain')+8:].split()
+    
+    total = 0
+    i = 0
+    while i < len(rule):
+        count = int(rule[i])
+        color = rule[i+1] + ' ' + rule[i+2]
+        total += count * get_bag_count(color)
+        i += 4
+    return total + 1
+
+tot = get_bag_count('shiny gold')
+print(tot - 1)
