@@ -15,29 +15,28 @@ def get_parent(child):
 
 
 if __name__ == '__main__':
-    with open("test.txt", "r") as data:
-        lines = data.readlines()
+    with open("data.txt", "r") as data:
+        lines = data.read().splitlines()
         random.shuffle(lines)
         target = "shiny gold"
         rules = {}
         """ Create rules. """
         for line in lines:
-            parent, child = line.strip().split("bags contain")
-            rules[parent.strip()] = [child]
-
+            parent, children = line.strip().split("bags contain")
+            rules[parent.strip()] = children.split(",")
         c = 1
         cc = []
         """ Search """
         while target != 'no other bags.':
             for rule in rules:
                 if rule == target:
-                    child = rules[rule][0]
-                    target = get_parent(child)
-                    count = get_count(child)
-                    if count != 0:
-                        c = c * count
-                        cc.append(c)
-                        print(target, child, c, cc, sum(cc))
+                    for child in rules[rule]:
+                        target = get_parent(child)
+                        count = get_count(child)
+                        if count != 0:
+                            c = c * count
+                            cc.append(c)
+                            print(target, child, c, cc, sum(cc))
 
 
 
