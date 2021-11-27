@@ -25,19 +25,38 @@ if __name__ == '__main__':
             parent, children = line.strip().split("bags contain")
             rules[parent.strip()] = children.split(",")
         c = 1
-        cc = []
+        levels = {}
+        index = 1
         """ Search """
         while target != 'no other bags.':
             for rule in rules:
                 if rule == target:
-                    for child in rules[rule]:
+                    children = rules[rule]
+                    tmp = []
+                    for child in children:
                         target = get_parent(child)
                         count = get_count(child)
-                        if count != 0:
-                            c = c * count
-                            cc.append(c)
-                            print(target, child, c, cc, sum(cc))
+                        tmp.append(count)
+                    levels[index] = tmp
+                    index += 1
+        cc = []
+        for level in levels:
+            b = sum(levels[level])
+            cc.append(b**level)
+        print(cc, sum(cc))
+"""
+                1 gold
+    1 red      2 black       3 yellow 
+1 2 3         4 5 6         7 8 9
+
+1 * 6      + 2 (4 + 5 + 6) + 3 (7 + 8 + 9) 
+"""
 
 
 
-               
+
+
+
+
+
+
