@@ -39,3 +39,50 @@ for line in data:
 
 print(total)
 
+# part 2
+
+def simplify_with_precedence(expr):
+    while len(expr) > 1:
+        ordered, hold = [], []
+        done = False
+        while not done and len(expr) > 0:
+            ch = expr.pop()
+            if ch == '+':
+                done = True
+            hold.append(ch)
+        if len(expr) == 0 and not done:
+            result = simplify(hold)
+            expr.append(result)
+        else:
+            ordered.append(expr.pop())
+            for _ in range(2):
+                ordered.append(hold.pop())
+            result = simplify(ordered)
+            hold.append(result)
+            while len(hold) > 0:
+                expr.append(hold.pop())
+    return expr[0]
+
+total = 0
+for line in data:
+    line = line.replace('(', '( ')
+    line = line.replace(')', ' )')
+    expr = line.split()
+    stack = []
+    for ch in expr:
+        if ch.isdigit() or ch in ['*', '+', '(']:
+            stack.append(ch)
+        elif ch == ')':
+            ordered_stack = []
+            while stack[len(stack)-1] != '(':
+                ordered_stack.append(stack.pop())
+            stack.pop()
+            result = simplify_with_precedence(ordered_stack)
+            stack.append(result)
+    stack.reverse()
+    result = simplify_with_precedence(stack)
+    total += int(result)
+
+print(total)
+
+
