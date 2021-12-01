@@ -49,3 +49,38 @@ for message in messages:
     if message in all_set:
         count += 1
 print(count)
+
+# part 2
+def solve2():
+    string_rule_42 = string_rules[42]
+    string_rule_31 = string_rules[31]
+    chunk_size = len(string_rule_42[0])
+    count = 0
+    for message in messages:
+        chunks42 = [False for _ in range(len(message)//chunk_size)]
+        chunks31 = [False for _ in range(len(message)//chunk_size)]
+        # Determine which chunk come from which rules
+        current_chunk = 0
+        for i in range(0, len(message), chunk_size):
+            if message[i:i+chunk_size] in string_rule_42:
+                chunks42[current_chunk] = True
+            if message[i:i+chunk_size] in string_rule_31:
+                chunks31[current_chunk] = True
+            current_chunk += 1
+        # Does this message match the rules?
+        count42, count31, current_chunk = 0, 0, 0
+        if chunks42[current_chunk] == True:
+            count42 += 1
+            current_chunk += 1
+            while current_chunk < len(chunks42) and chunks42[current_chunk]:
+                count42 += 1
+                current_chunk += 1
+            while current_chunk < len(chunks31) and chunks31[current_chunk]:
+                count31 += 1
+                current_chunk += 1
+            if current_chunk == len(chunks31) and 0 < count31 < count42:
+                count += 1
+    return count
+
+c = solve2()
+print(c)
