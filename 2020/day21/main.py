@@ -52,3 +52,14 @@ for ingredients, allergens in foods:
         if i not in solved.values():
             count += 1
 print(count)
+
+# part 2 
+bad_ingredients = []
+for i in solved.keys():
+    bad_ingredients.append(i)
+bad_ingredients.sort()
+
+canonical = ''
+for i in bad_ingredients:
+    canonical += solved[i] + ','
+print(canonical[:-1])
