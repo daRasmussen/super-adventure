@@ -48,4 +48,31 @@ for line in lines:
    else:
        black_tiles.add((x,y,z))
 print(len(black_tiles))
+# part 2
+def get_adjacent_count(tile):
+    (x,y,z) = tile
+    count = 0
+    for (i,j,k) in [(1,-1,0),(-1,1,0),(1,0,-1),(-1,0,1),(0,1,-1),(0,-1,1)]:
+        if (x+i, y+j, z+k) in black_tiles:
+            count += 1
+    return count
+for _ in range(100):
+    new_black_tiles = set()
+    adjacent_tiles = set()
+    # find all the adjacent tiles
+    for (x,y,z) in black_tiles:
+        count = get_adjacent_count((x,y,z))
+        if count == 1 or count == 2:
+            new_black_tiles.add((x,y,z))
+        for (i,j,k) in [(1,-1,0),(-1,1,0),(1,0,-1),(-1,0,1),(0,1,-1),(0,-1,1)]:
+            adjacent_tiles.add((x+i, y+j, z+k))
+    # find the adjacent tiles that should be flipped 
+    for (x,y,z) in adjacent_tiles:
+        count = get_adjacent_count((x,y,z))
+        if (x,y,z) in black_tiles and (count == 1 or count == 2):
+            new_black_tiles.add((x,y,z))
+        elif (x,y,z) not in black_tiles and count == 2:
+            new_black_tiles.add((x,y,z))
+    black_tiles = new_black_tiles
+print(len(black_tiles))
 
