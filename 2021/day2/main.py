@@ -15,3 +15,21 @@ for instruction in instructions:
         dep -= val
 print(pos * dep)
 
+# part 2
+aim = 0
+pos = 0
+dep = 0
+for instruction in instructions:
+    cmd, val = instruction.split(" ")
+    val = int(val)
+    if cmd == "forward":
+        pos += val
+        dep += aim * val
+    if cmd == "down":
+        aim += val
+    if cmd == "up":
+        aim -= val
+print(pos * dep)
+
+
+
