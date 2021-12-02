@@ -1,7 +1,6 @@
 from sys import maxsize
 
-
-def get_wires(filename: str) -> (list, list):
+def get_wires(filename: str):
     with open(filename) as file:
         return (
             list(file.readline().strip().split(",")),
@@ -39,16 +38,20 @@ def set_path(
             else:
                 distance = min(
                    distance,
-                   delay.get(key) + count if set_delay else abs(x) + abs(y)
+                   delay[key] + count if set_delay else abs(x) + abs(y)
                 )
             max_steps -= 1
     return distance
 
+def get_distance(area, delay, wire1, wire2, set_delay):
+    set_path(area, delay, wire1, 1, set_delay)
+    return set_path(area, delay, wire2, 2, set_delay)
+
 # part 1
 filename = 'data.txt'
 wire1, wire2 = get_wires(filename)
-area = {}
-delay = {}
-set_path(area, delay, wire1, 1, False)
-r = set_path(area, delay, wire2, 2, False)
-print(r)
+print(get_distance({}, {}, wire1, wire2, False))
+
+# part 2 
+print(get_distance({}, {}, wire1, wire2, True))
+
