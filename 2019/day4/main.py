@@ -39,3 +39,7 @@ with open("data.txt") as f:
 start, end = d[0], d[1]
 r = len([num for num in range(start, end + 1) if has_repeated_adjacent(num) and is_non_decreasing(num)])
 print(r)
+
+# part 2
+r = len([num for num in range(start, end + 1) if has_a_double_adjacent(num) and is_non_decreasing(num)])
+print(r)
