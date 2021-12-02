@@ -43,4 +43,3 @@ print(r)
 # part 2
 r = len([num for num in range(start, end + 1) if has_a_double_adjacent(num) and is_non_decreasing(num)])
 print(r)
-
