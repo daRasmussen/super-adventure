@@ -1,42 +1,54 @@
-import re
-with open('data.txt') as f:
-    d = f.readlines()
-    d = [x.strip() for x in d]
-    pattern = re.compile(r"(\w)(\d+)")
-    cabels = []
-    for cabel in d:
-        nodes = cabel.split(",")
-        tmp = []
-        for node in nodes:
-            res = pattern.match(node).groups()
-            tmp.append({
-                "direction": res[0],
-                "value": int(res[1])
-            })
-        cabels.append(tmp)
-coords = []
-for c in cabels:
-    pos = [0, 0]
-    tmp = [pos]
-    for n in c:
-        direction, value = n.values()
-        t = [tmp[-1][0], tmp[-1][1]]
-        if direction == 'L':
-            t[0] -= value
-        if direction == 'R':
-            t[0] += value
-        if direction == 'U':
-            t[1] += value
-        if direction == 'D':
-            t[1] -= value
-        tmp.append(t)
-    coords.append(tmp)
+from sys import maxsize
 
-for path in coords:
-    for index, coord in enumerate(path):
-        k1, k2 = path[index], path[index+1 if index + 1 < len(path) else index]
-        x1, y1 = k1[0], k1[1]
-        x2, y2 = k2[0], k2[1]
-        if x1 != x2 or y1 != y2:
-            print(x1, x2, y1, y2)
-        #print(x1, y1, x2, y2)
+
+def get_wires(filename: str) -> (list, list):
+    with open(filename) as file:
+        return (
+            list(file.readline().strip().split(",")),
+            list(file.readline().strip().split(","))
+        )
+
+
+def set_path(
+        area: dict, 
+        delay: dict, 
+        wires: list,
+        nbr: int, 
+        set_delay: bool) -> int:
+    distance = maxsize
+    x, y = 0, 0
+    count = 0
+    for wire in range(len(wires)):
+        prior = wires[wire]
+        direction, steps = prior[0:1], int(prior[1:])
+        max_steps = steps
+        while max_steps > 0:
+            if direction == "R":
+                x += 1
+            elif direction == "L":
+                x -= 1
+            elif direction == "U":
+                y += 1
+            elif direction == "D":
+                y -= 1
+            count += 1
+            key = f"{x} {y}"
+            if area.get(key) is None or area.get(key) == nbr:
+                area[key] = nbr
+                delay[key] = count
+            else:
+                distance = min(
+                   distance,
+                   delay.get(key) + count if set_delay else abs(x) + abs(y)
+                )
+            max_steps -= 1
+    return distance
+
+# part 1
+filename = 'data.txt'
+wire1, wire2 = get_wires(filename)
+area = {}
+delay = {}
+set_path(area, delay, wire1, 1, False)
+r = set_path(area, delay, wire2, 2, False)
+print(r)
