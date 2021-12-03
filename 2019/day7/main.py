@@ -80,3 +80,27 @@ for phase_perm in phase_perms:
         output = run(program.copy(), [phase_perm.pop(0), output])
     max_thrust_signal = max(max_thrust_signal, output)
 print(max_thrust_signal)
+
+# part 2
+def run_with_phase_settings(program, phase_settings):
+    programs, pcs, inputs = [], [], []
+    num_amps = len(phase_settings)
+    amp_output = 0
+    for i in range(0, num_amps):
+        programs.append(program.copy())
+        pcs.append(0)
+        inputs.append([phase_settings[i]])
+    while pcs[0] is not None:
+        for i in range(0, num_amps):
+            inputs[i].append(amp_output)
+            amp_output, pc = run(programs[i], inputs[i], True, pcs[i])
+            pcs[i] = pc
+    return inputs[0][0]
+
+max_thrust_signal = 0
+p = read_intcode("data.txt")
+for phase_perm in get_phase_permutations(range(5, 10)):
+    max_thrust_signal = max(max_thrust_signal, run_with_phase_settings(p, phase_perm))
+
+print(max_thrust_signal)
+
