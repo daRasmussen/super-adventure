@@ -43,6 +43,7 @@ def run(program, input_id):
         elif opcode == 7:
             op1, op2 = _get_op1(program, pc, op1_mode), _get_op2(program, pc, op2_mode)
             program[program[pc + 3]] = 1 if op1 < op2 else 0
+            pc += 4
         elif opcode == 8:
             op1, op2 = _get_op1(program, pc, op1_mode), _get_op2(program, pc, op2_mode)
             program[program[pc + 3]] = 1 if op1 == op2 else 0
@@ -55,4 +56,7 @@ def run(program, input_id):
     return diagnostic_code
 
 # part 1
-print(run(read_intcode("data.txt"),1))
+#print(run(read_intcode("data.txt"), 1))
+
+# part 2
+print(run(read_intcode("data.txt"), 5))
