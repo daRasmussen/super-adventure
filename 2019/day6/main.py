@@ -29,3 +29,14 @@ count = 0
 for node in graph.keys():
     count += count_orbits(graph, node)
 print(count)
+
+# part 2 
+graph = get_orbits("data.txt")
+_you = get_path(graph, "YOU")
+_santa = get_path(graph, "SAN")
+count_you = len(_you) - 1
+count_santa = len(_santa) - 1
+while _you[count_you] == _santa[count_santa]:
+    count_you -= 1
+    count_santa -= 1
+print(count_you + count_santa + 2)
