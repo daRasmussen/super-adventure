@@ -44,3 +44,7 @@ w, h  = 25, 6
 images = get_image_pixels("data.txt")
 r = get_layer_with_fewest_zeros(compute_frequencies(images, w, h))
 print(r[1] * r[2])
+
+# part 2
+r = compute_image(images, w, h)
+print(r)
