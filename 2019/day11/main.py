@@ -30,6 +30,7 @@ def _print_hull(hull):
     return "\n".join(hull_str)
 # part 1
 grid = {}
+grid = {tuple([0, 0]): 1} # starting panel is white
 data = _get_program("data.txt")
 vm = Intcode(data)
 robot_grid = RobotGrid(grid)
@@ -44,3 +45,13 @@ while True:
     vm.set_input(curr_color)
     robot_grid.move_robot(vm.run())
 print(painted_count)
+# part 2 
+#grid = {tuple([0, 0]): 1} # starting panel is white
+grid_max_width = painted_count
+hull = [[" "] * grid_max_width for i in range(0, grid_max_width)]
+origin_x, origin_y = grid_max_width // 2, grid_max_width // 2
+for key, value in grid.items():
+    if value == 1:
+        hull[origin_y + key[1]][origin_x + key[0]] = "█"
+r = _print_hull(hull)
+print(r)

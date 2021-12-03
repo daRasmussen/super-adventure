@@ -13,6 +13,8 @@ class Intcode:
     def get_output(self):
         return self.output
     def run_until_input_or_done(self):
+        return self.run(False, True)
+    def run_until_io_or_done(self):
         return self.run(True, True)
     def run(self, stop_on_output=True, stop_on_input=False):
         self.stopped_on_input = False
