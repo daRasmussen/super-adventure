@@ -77,6 +77,6 @@ def run(program, input_id=0):
 r = run(get_data("data.txt"), 1)
 print(r)
 
-
-
-
+# part 2
+r = run(get_data("data.txt"), 2)
+print(r)
