@@ -68,3 +68,20 @@ def _get_monitoring_station_position(asteroid_grid):
 grid = _get_astriod_grid("data.txt")
 r = _get_monitoring_station_position(grid)[0]
 print(r)
+
+# part 2
+grid = _get_astriod_grid("data.txt")
+width, height = len(grid[0]), len(grid)
+vectors = _calc_vectors(width, height)
+max_asteroids, station_pos = _get_monitoring_station_position(grid)
+vaporized_count = 0
+vaporized_target = 200
+while vaporized_count < vaporized_target:
+    for vector in vectors:
+        asteroid_pos = _find_asteroid_pos(grid, width, height, station_pos[0], station_pos[1], vector[0], vector[1])
+        if asteroid_pos is not None:
+            grid[asteroid_pos[1]][asteroid_pos[0]] = "." # vaporized
+            vaporized_count += 1
+            if vaporized_count == vaporized_target:
+                r = asteroid_pos[0] * 100 + asteroid_pos[1]
+                print(r)
