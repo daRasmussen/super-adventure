@@ -105,3 +105,7 @@ universe.simulate(steps)
 r = universe.calc_total_energy()
 print(r)
 
+# part 2
+universe = _load_moons_from_file("data.txt")
+r = universe.calc_universe_cycle_len()
+print(r)
