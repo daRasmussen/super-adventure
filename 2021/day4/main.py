@@ -1,6 +1,6 @@
 import sys
 import time
-from typing import List
+from typing import List, Set
 
 test = True
 debug = False
@@ -128,4 +128,100 @@ if tries:
 expected = None
 if expected is not None:
     assert test or ans_part1 == expected
+# Part 2
+###############################################################################
+print("\nPart 2:")
 
+def part2(lines: List[str]) -> int:
+    def checkrow(r: List[int], x: Set[int]) -> bool:
+        return set(r) - x == set()
+    def check_board(b: List[List[int]], ns: Set[int]):
+        for r in b:
+            if checkrow(r, ns):
+                return r
+        for c in range(5):
+            col = [b[r][c] for r in range(5)]
+            if checkrow(col, ns):
+                return col
+        return None
+    boards = []
+    curboard = []
+    for l in lines[2:]:
+        if l.strip() == "":
+            boards.append(curboard)
+            curboard = []
+            continue
+        curboard.append([int(x) for x in l.split()])
+    boards.append(curboard)
+    ns = list(map(int, lines[0].split(",")))
+    called = ns[:5]
+    i = 5
+    while True:
+        nb = []
+        if len(boards) > 1:
+            for b in boards:
+                cb = check_board(b, set(called))
+                if cb is None:
+                    nb.append(b)
+                boards = nb
+        called = ns[: 5 + i]
+        i += 1
+        if len(boards) == 1 and check_board(b, set(called)):
+            x = 0
+            for r in boards[0]:
+                for c in r:
+                    if c not in called:
+                        x += c
+            l = []
+            s = set()
+            for r in boards[0]:
+                for c in r:
+                    l.append(c)
+                    s.add(c)
+            assert len(l) == len(s)
+            return x * called[-1]
+
+    # Run test on part 2
+if test:
+    print("Running test... ", end="")
+    if not test_lines:
+        print(f"{bcolors.FAIL}No test configured!{bcolors.ENDC}")
+    else:
+        test_ans_part1 = part1(test_lines)
+        expected = 1924
+        if expected is None:
+            print(f"{bcolors.FAIL}No test configured!{bcolors.ENDC}")
+        elif test_ans_part1 == expected:
+            print(f"{bcolors.OKGREEN}PASS{bcolors.ENDC}")
+        else:
+            print(f"{bcolors.FAIL}FAIL{bcolors.ENDC}")
+        print("Result: ", test_ans_part1)
+        print()
+
+part2_start = time.time()
+print("Running input...")
+ans_part2 = part2(input_lines)
+part2_end = time.time()
+print("Result: ", ans_part2)
+
+tries2 = [
+    40100
+]
+
+if tries2:
+    print("Tries Part 2:", tries)
+    assert ans_part2 not in tries, "Same as an incorrect answer!"
+
+# Regression Test
+expected = None
+if expected is not None:
+    assert test or ans_part1 == expected
+
+if debug:
+    part1_time = part1_end - part1_start
+    part2_time = part2_end - part2_start
+    print()
+    print("DEBUG")
+    print(f"Part 1: {part1_time * 1000}ms")
+    print(f"Part 2: {part2_time * 1000}ms")
+    print(f"TOTAL: {(part1_time + part2_time) * 1000}ms")
