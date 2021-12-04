@@ -48,3 +48,10 @@ data = read_integers("data.txt")
 target_phases = 100
 output = fft(data, target_phases)
 print("".join(map(str, output[:8])))
+
+# Part 2 
+input_num = read_integers("data.txt") * 10000
+target_phases = 10000
+offset = int("".join(map(str, input_num[:7])))
+output = fft_second_half(input_num, target_phases)
+print("".join(map(str, output[offset:offset + 8])))
