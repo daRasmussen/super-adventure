@@ -17,7 +17,7 @@ def load_reactions(filename: str) -> dict:
 
 def count_ores_recursive(totals: dict, formulas: dict, chem_name: str, amount: int):
     # Base case
-    if chem_name == 'ORE':
+    if chem_name == "ORE":
         return amount
     deps = formulas[chem_name]
     output_amount = deps[0]
@@ -55,3 +55,10 @@ for key in formulas.keys():
 r = count_ores_recursive(totals, formulas, 'FUEL', fuel_amount)
 print(r)
 
+# part 2
+formulas = load_reactions("data.txt")
+totals = {}
+for key in formulas.keys():
+    totals[key] = 0
+r = fuel_produced(totals, formulas)
+print(r - 1)
