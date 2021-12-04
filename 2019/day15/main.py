@@ -78,3 +78,11 @@ visited = set()
 walls = set()
 distance, pos = find_oxygen(vm, visited, walls, False)
 print(distance)
+
+# part 2
+vm = Intcode(data)
+visited = set()
+walls = set()
+distance, start_pos = find_oxygen(vm, visited, walls, True)
+r = bsf_levels(visited, walls, start_pos)
+print(r)
