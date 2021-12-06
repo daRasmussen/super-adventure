@@ -48,10 +48,26 @@ data = read_integers("data.txt")
 target_phases = 100
 output = fft(data, target_phases)
 print("".join(map(str, output[:8])))
-
+print('\n PART 2')
 # Part 2 
-input_num = read_integers("data.txt") * 10000
-target_phases = 10000
-offset = int("".join(map(str, input_num[:7])))
-output = fft_second_half(input_num, target_phases)
-print("".join(map(str, output[offset:offset + 8])))
+def read(name, strip = True):
+    with open(name) as f:
+        content = f.readlines()
+    if strip:
+        return [x.strip() for x in content]
+    return content
+
+def solve():
+    input_values = read("data.txt")[0]
+    offset = int(input_values[:7])
+    elements = [int(num) for _ in range(10000) for num in input_values][offset:]
+    for _ in range(100):
+        for i in range(-2, -len(elements)-1, -1):
+            elements[i] = (elements[i] + elements[i+1]) % 10
+    return "".join([str(x) for x in elements[:8]])
+
+r = solve()
+print(f"Solution: {r}")
+
+
+
