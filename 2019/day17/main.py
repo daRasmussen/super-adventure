@@ -160,10 +160,10 @@ def string_to_ascii_list(string: str) -> list:
 
 def get_collected_dust(vm: Intcode) -> int:
     # This is obtained from inspecting the robot path (grid)
-    input_routine = string_to_ascii_list('A,B,A,B,C,B,A,C,B,C\n'
-                                         'L,12,L,8,R,10,R,10\n'
-                                         'L,6,L,4,L,12\n'
-                                         'R,10,L,8,L,4,R,10\n'
+    input_routine = string_to_ascii_list('A,B,B,A,C,A,C,A,C,B\n'
+                                         'L,6,R,12,R,8\n'
+                                         'R,8,R,12,L,12\n'
+                                         'R,12,L,12,L,4,L,4\n'
                                          'n\n')
     while True:
         if len(input_routine) > 0:
@@ -185,6 +185,4 @@ def part_two() -> int:
 
 print('\n')
 ans = part_two()
-print(ans)
-
-# submit(ans, part="b", day=17, year=2019)
+submit(ans, part="b", day=17, year=2019)
