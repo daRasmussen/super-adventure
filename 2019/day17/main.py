@@ -152,6 +152,39 @@ def part_one() -> int:
     return get_alignment_param_sum(grid, width, height)
 
 ans = part_one()
-submit(ans, part="a", day=17, year=2019)
+#submit(ans, part="a", day=17, year=2019)
+
+def string_to_ascii_list(string: str) -> list:
+    return list(map(ord, list(string)))
 
 
+def get_collected_dust(vm: Intcode) -> int:
+    # This is obtained from inspecting the robot path (grid)
+    input_routine = string_to_ascii_list('A,B,A,B,C,B,A,C,B,C\n'
+                                         'L,12,L,8,R,10,R,10\n'
+                                         'L,6,L,4,L,12\n'
+                                         'R,10,L,8,L,4,R,10\n'
+                                         'n\n')
+    while True:
+        if len(input_routine) > 0:
+            vm.set_input(input_routine.pop(0))
+        output = vm.run_until_input_or_done()
+        if output is None:
+            collected_dust = vm.get_output()
+            break
+    return collected_dust
+
+
+def part_two() -> int:
+    program = read_intcode()
+    program[0] = 2
+    vm = Intcode(program)
+    grid, width, height = get_grid(vm)
+    print(serialize_grid(grid, width, height))
+    return get_collected_dust(vm)
+
+print('\n')
+ans = part_two()
+print(ans)
+
+# submit(ans, part="b", day=17, year=2019)
