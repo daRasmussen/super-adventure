@@ -1,4 +1,5 @@
 from aocd import submit, get_data
+from math import ceil
 
 data = get_data(day=19, year=2019)
 
@@ -157,6 +158,28 @@ def part_one(width: int, height: int) -> int:
     return points
 
 ans = part_one(50, 50)
-submit(ans, part='a', day=19, year=2019)
+#submit(ans, part='a', day=19, year=2019)
 
-# submit(ans, part='b', day=19, year=2019)
+def binary_search(program: list, slope: float) -> int:
+    y_low = 0
+    y_high = 10000
+    while y_low < y_high:
+        y_mid = (y_high + y_low) // 2
+        x_mid = find_right_edge(program, y_mid, y_mid) # search in square y_mid
+        y_mid = ceil(x_mid * slope)
+        if is_in_beam(program, x_mid - 99, y_mid + 99):
+            y_high = y_mid
+        else:
+            y_low = y_mid + 1
+    return find_right_edge(program, y_high, y_high)
+
+def part_two() -> int:
+    program = read_intcode()
+    slope = get_slope(program)
+    x = binary_search(program, slope)
+    y = ceil(x * slope)
+    return (x - 99) * 10000 + y
+
+ans = part_two()
+
+submit(ans, part='b', day=19, year=2019)
