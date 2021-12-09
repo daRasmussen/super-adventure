@@ -1,72 +1,88 @@
 from aocd import get_data
+import itertools
 
-data = get_data(day=5, year=2019)
+data = get_data(day=9, year=2019)
 
-OP = [int(x) for x in data.split(",")]
+class Program(object):
+    def __init__(self, pid, data, inputs):
+        self.P = [int(x) for x in data.split(",")]
+        self.Q = inputs
+        self.ip = 0
+        self.pid = pid
+        self.rel_base = 0 
+    def idx(self, i):
+        return self.P[self.ip+1+i]
+    def val(self, i, I):
+        mode = (0 if i >= len(I) else I[i])
+        val = self.P[self.ip+1+i]
+        if mode == 0:
+            val = self.P[val]
+        elif mode == 2:
+            val = self.P[val+self.rel_base]
+        return val
+    def run(self):
+        """ Return next output  """
+        while True:
+            cmd = str(self.P[self.ip])
+            opcode = int(cmd[-2:])
+            I = list(reversed([int(x) for x in cmd[:-2]]))
+            print(opcode,I,self.P[self.ip:self.ip+4])
+            if opcode == 1:
+                while len(self.P) <= self.idx(2):
+                    self.P.append(0)
+                self.P[self.idx(2)] = self.val(0, I) + self.val(1, I)
+                self.ip += 4
+            if opcode == 2:
+                while len(self.P) <= self.idx(2):
+                    self.P.append(0)
+                self.P[self.idx(2)] = self.val(0, I) * self.val(1, I)
+                self.ip += 4
+            elif opcode == 3:
+                while len(self.P) <= self.idx(0):
+                    self.P.append(0)
+                self.P[self.idx(0)] == self.Q[0]
+                self.Q.pop(0)
+                self.ip += 2
+            elif opcode == 4:
+                ans = self.val(0, I)
+                self.ip += 2
+                return ans
+            elif opcode == 5:
+                self.ip = self.val(1, I) if self.val(0, I) != 0 else self.ip +3
+            elif opcode == 6:
+                self.ip = self.val(1, I) if self.val(0, I) == 0 else self.ip +3
+            elif opcode == 7:
+                while len(self.P) <= self.idx(2):
+                    self.P.append(0)
+                self.P[self.idx(2)] = (1 if self.val(0, I) < self.val(1,I) else 0) 
+                self.ip += 4
+            elif opcode == 8:
+                self.P[self.idx(2)] = (1 if self.val(0,I) == self.val(1, I) else 0)
+            elif opcode == 9:
+                self.rel_base += self.val(0, I)
+                self.ip += 2
+            else:
+                assert opcode == 99, opcode
+                return None
 
-P = [x for x in OP]
-ip = 0
-while True:
-    print(ip)
-    digits = [int(x) for x in str(P[ip])]
-    opcode = (0 if len(digits) == 1 else digits[-2]) * 10 + digits[-1]
-    digits = digits[:-2]
-    if opcode == 1:
-        while len(digits) < 3: 
-            digits = [0] + digits
-        i1, i2, i3, = P[ip+1], P[ip+2], P[ip+3]
-        print(opcode,i1,i2,i3,digits)
-        P[i3] = (i1 if digits[2] == 1 else P[i1]) + (i2 if digits[1] == 1 else P[i2])
-        ip += 4
-    elif opcode == 2:
-        while len(digits) < 3:
-            digits = [0] + digits
-        i1, i2, i3 = P[ip+1], P[ip+2], P[ip+3]
-        print(opcode,i1,i2,i3,digits)
-        P[i3] = (i1 if digits[2] == 1 else P[i1]) * (i2 if digits[1] == 1 else P[i2])
-        ip += 4
-    elif opcode == 3:
-        i1 = P[ip+1]
-        P[i1] = 5 # special input 
-        ip += 2
-    elif opcode == 4:
-        i1 = P[ip+1]
-        print(P[i1])
-        ip += 2
-    elif opcode == 5:
-        while len(digits) < 2:
-            digits = [0] + digits
-        i1, i2 = P[ip+1], P[ip+2]
-        if (i1 if digits[1]==1 else P[i1]) != 0:
-            ip = (i2 if digits[0] == 1 else P[i2])
-        else:
-            ip += 3
-    elif opcode == 6:
-        while len(digits) < 2:
-            digits = [0] + digits
-        i1, i2 = P[ip+1], P[ip+2]
-        if (i1 if digits[1] == 1 else P[i1]) == 0:
-            ip = (i2 if digits[0] == 1 else P[i2])
-        else:
-            ip += 3
-    elif opcode == 7:
-        while len(digits) < 3:
-            digits = [0]+digits
-        i1, i2, i3 = P[ip+1], P[ip+2], P[ip+3]
-        if (i1 if digits[2] == 1 else P[i1]) < (i2 if digits[1] == 1 else P[i2]):
-            P[i3] = 1
-        else:
-            P[i3] = 0
-        ip += 4
-    elif opcode == 8:
-        while len(digits) < 3:
-            digits = [0]+digits
-        i1, i2, i3 = P[ip+1], P[ip+2], P[ip+3]
-        if (i1 if digits[2] == 1 else P[i1]) == (i2 if digits[1] == 1 else P[i2]):
-            P[i3] = 1
-        else:
-            P[i3] = 0
-        ip += 4
-    else: 
-        assert opcode == 99
-        break
+PERM = itertools.permutations([5,6,7,8,9])
+ans = 0
+for perm in PERM:
+    THREAD = [Program(i, data, [perm[i]]) for i in range(len(perm))]
+    THREAD[0].Q.append(0)
+    score = 0
+    done = False
+    while not done:
+        for i in range(len(perm)):
+            val = THREAD[i].run()
+            print("RET", i, val, THREAD[i].Q, THREAD[i].ip)
+            if val == None:
+                print(perm, score)
+                if score > ans:
+                    ans = score
+                done = True
+                break
+            elif i == len(perm) - 1:
+                score = val
+            THREAD[(i+1)%len(THREAD)].Q.append(val)
+print(ans)
