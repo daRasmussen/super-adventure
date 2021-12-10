@@ -130,5 +130,12 @@ def part_one() -> int:
 
 
 ans = part_one()
-submit(ans, part='a', day=20, year=2019)
-# submit(ans, part='b', day=20, year=2019)
+# submit(ans, part='a', day=20, year=2019)
+
+def part_two() -> int:
+    grid = read_map()
+    portals_key_pos, portals_key_name = find_portals(grid)
+    return bsf_min_steps(grid, portals_key_pos, portals_key_name, find_start(grid), True)
+
+ans = part_two()
+submit(ans, part='b', day=20, year=2019)
