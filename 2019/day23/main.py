@@ -173,6 +173,21 @@ def part_one(num_computers: int, target_address: int) -> int:
                 return packet[2] # Y value
 
 ans = part_one(50, 255)
-submit(ans, part='a', day=23, year=2019)
+# submit(ans, part='a', day=23, year=2019)
 
-# submit(ans, part='b', day=23, year=2019)
+def part_two(num_computers: int, nat_address: int) -> int or None:
+    network = init_network(read_intcode(), num_computers, nat_address)
+    nat = NAT(network)
+    while True:
+        for computer in network:
+            packet = computer.run_until_io()
+            if packet is not None and packet[0] == nat_address:
+                nat.packet = (packet[1], packet[2])
+            if nat.is_network_idle() and nat.has_packet():
+                if nat.is_repeated_y():
+                    return nat.last_y_delivered
+                else:
+                    nat.last_y_delivered = None
+                nat.send_packet()
+ans = part_two(50, 255)
+submit(ans, part='b', day=23, year=2019)
