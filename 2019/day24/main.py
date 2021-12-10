@@ -1,3 +1,4 @@
+from os import setpriority
 from aocd import submit, get_data
 
 data = get_data(day=24, year=2019)
@@ -109,6 +110,22 @@ def part_one() -> int:
         states.add(state)
 
 ans = part_one()
-submit(ans, part='a', day=24, year=2019)
+#submit(ans, part='a', day=24, year=2019)
 
-# submit(ans, part='b', day=24, year=2019)
+def count_bugs(grids: dict) -> int:
+    return sum([serialize_state(grid).count("#") for grid in grids.values()])
+
+def part_two(minutes: int) -> int:
+    grid = read_map()
+    size = len(grid)
+    grids = {0:grid}
+    # We need to allocate minutes/2 levels up and minutes/2 levels down, plus extra boundray levels.
+    for m in range(1, (minutes // 2) + 2):
+        grids[m] = get_empty_grid(size)
+        grids[-m] = get_empty_grid(size)
+    for m in range(minutes):
+        grids = simulate(grids, True)
+    return count_bugs(grids)
+
+ans = part_two(200)
+submit(ans, part='b', day=24, year=2019)
