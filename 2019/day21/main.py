@@ -142,6 +142,23 @@ def part_one() -> int:
     return get_hull_damage(Intcode(read_intcode()), script)
 
 ans = part_one()
-submit(ans, part='a', day=21, year=2019)
+# submit(ans, part='a', day=21, year=2019)
 
-# submit(ans, part='b', day=21, year=2019)
+def part_two() -> int:
+    script = [
+        "NOT A T",
+        "NOT B J",
+        "OR T J",
+        "NOT C T",
+        "OR T J",
+        "AND D J",
+        "NOT E T",
+        "NOT T T",
+        "OR H T",
+        "AND T J",
+        "RUN"
+    ]
+    return get_hull_damage(Intcode(read_intcode()), script)
+
+ans = part_two()
+submit(ans, part='b', day=21, year=2019)
