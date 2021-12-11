@@ -1,0 +1,22 @@
+['mutex', 'dark matter', 'klein bottle', 'tambourine']                  lighter
+['mutex', 'dark matter', 'tambourine', 'fuel cell']                     heavier
+['mutex', 'dark matter', 'fuel cell', 'astrolabe']                      heavier
+['mutex', 'dark matter', 'astrolabe', 'monolith']                       heavier
+['mutex', 'dark matter', 'monolith', 'cake']                            heavier
+['mutex', 'dark matter', 'klein bottle', 'fuel cell']                   heavier
+['mutex', 'dark matter', 'klein bottle', 'astrolabe']                   heavier
+['mutex', 'dark matter', 'klein bottle', 'monolith']                    heavier
+['mutex', 'dark matter', 'klein bottle', 'cake']                        heavier
+['dark matter', 'klein bottle', 'tambourine', 'fuel cell']              lighter
+['dark matter', 'klein bottle', 'fuel cell', 'astrolabe']               heavier
+['dark matter', 'klein bottle', 'astrolabe', 'monolith']                heavier
+['dark matter', 'klein bottle', 'monolith', 'cake']                     heavier
+['klein bottle', 'tambourine', 'fuel cell', 'astrolabe']                lighter
+['klein bottle', 'tambourine', 'astrolabe', 'monolith']                 lighter
+['klein bottle', 'tambourine', 'monolith', 'cake']                      lighter
+['klein bottle', 'tambourine', 'fuel cell', 'monolith']                 lighter
+['klein bottle', 'tambourine', 'fuel cell', 'cake']                     lighter
+['klein bottle', 'tambourine', 'astrolabe', 'cake']                     lighter
+['tambourine', 'fuel cell', 'astrolabe', 'monolith']                    heavier
+['tambourine', 'fuel cell', 'monolith', 'cake']                         heavier
+['fuel cell', 'astrolabe', 'monolith', 'cake']                          lighter
