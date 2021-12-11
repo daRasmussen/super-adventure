@@ -54,5 +54,53 @@ def test_part1(data, result):
 ans = part1(data).get("checksum")
 print(ans)
 
-submit(ans, part='a', day=2, year=2018)
-# submit(ans, part='b', day=2, year=2018)
+# submit(ans, part='a', day=2, year=2018)
+
+def part2(data: str) -> str:
+    c2 = 0
+    c3 = 0
+    ids = []
+    for line in data.splitlines():
+        s = line.strip()
+        ids.append(s)
+        count = {}
+        for c in s:
+            if c not in count:
+                count[c] = 0
+            count[c] += 1
+        has_two = False
+        has_three = False
+        for k, v in count.items():
+            if v == 2:
+                has_two = True
+            if v == 3:
+                has_three = True
+        if has_two:
+            c2 += 1
+        if has_three:
+            c3 += 1
+    for x in ids:
+        for y in ids:
+            diff = 0
+            for i in range(len(x)):
+                if x[i] != y[i]:
+                    diff += 1
+            if diff == 1:
+                ans = []
+                for i in range(len(x)):
+                    if x[i] == y[i]:
+                        ans.append(x[i])
+                return "".join(ans)
+
+
+@pytest.mark.parametrize(
+    ("data", "result"),
+    (
+        TestData("abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz\n", "fgij"),
+    )
+)
+def test_part2(data, result):
+    assert part2(data) == result
+
+ans = part2(data)
+submit(ans, part='b', day=2, year=2018)
