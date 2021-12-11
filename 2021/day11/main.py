@@ -24,8 +24,9 @@ def flash(r,c):
                 G[rr][cc] += 1
                 if G[rr][cc] >= 10:
                     flash(rr, cc)
-
-for t in range(100):
+t = 0
+while True:
+    t += 1
     for r in range(R):
         for c in range(C):
             G[r][c] += 1
@@ -33,10 +34,17 @@ for t in range(100):
         for c in range(C):
             if G[r][c] == 10:
                 flash(r, c)
+    done = True
     for r in range(R):
         for c in range(C):
             if G[r][c] == -1:
                 G[r][c] = 0
+            else:
+                done = False 
+    if done:
+        print(t)
+        submit(t, part="b", day=11, year=2021)
+        break
+
 print(ans)
-submit(ans, part='a', day=11, year=2021)
-# submit(ans, part='b', day=11, year=2021)
+#submit(ans, part='a', day=11, year=2021)
