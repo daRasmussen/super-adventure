@@ -12,9 +12,9 @@ def parseTime(line):
     return int(time.split(":")[1])
 
 C = defaultdict(int)
-CM = defaultdict(lambda: defaultdict(int))
+CM = defaultdict(int)
 guard = None
-asleep = False
+asleep = None
 for line in lines:
     time = parseTime(line)
     if "begins shift" in line:
@@ -24,7 +24,7 @@ for line in lines:
         asleep = time
     elif "wakes up" in line:
         for t in range(asleep, time):
-            CM[guard][t] += 1
+            CM[(guard, t)] += 1
             C[guard] += 1
 
 def argmax(d):
@@ -34,11 +34,7 @@ def argmax(d):
             best = k
     return best
 
-best_guard = argmax(C)
-best_min = argmax(CM[best_guard])
-
+best_guard, best_min = argmax(CM)
 ans = best_guard * best_min
 print(ans)
-submit(ans, part='a', day=4, year=2018)
-
-# submit(ans, part='b', day=4, year=2018)
+submit(ans, part='b', day=4, year=2018)
