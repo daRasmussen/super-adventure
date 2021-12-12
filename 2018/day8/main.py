@@ -32,5 +32,18 @@ def sum_metadata(node):
 root = read_tree()
 ans = sum_metadata(root)
 print(ans)
-submit(ans, part='a', day=8, year=2018)
-# submit(ans, part='b', day=8, year=2018)
+# submit(ans, part='a', day=8, year=2018)
+
+def value(node):
+    children, metadata = node
+    if not children:
+        return sum(metadata)
+    else:
+        ans = 0
+        for m in metadata:
+            if 1 <= m <= len(children):
+                ans += value(children[m-1])
+        return ans
+
+ans = value(root)
+submit(ans, part='b', day=8, year=2018)
