@@ -1,63 +1,46 @@
 from aocd import submit, get_data
-from collections import defaultdict
+import numpy as np
+import itertools
+import matplotlib.pyplot as plt
+from numpy.lib.arraysetops import unique
 
 data = get_data(day=6, year=2018)
-
-P = []
-
+coords = []
 for line in data.splitlines():
-    x, y = [int(s.strip()) for s in line.split(",")]
-    P.append((x, y))
+    x, y = line.split(",")
+    coords.append((x, y))
+x_coords = [int(x) for x, _ in coords]
+y_coords = [int(y) for _, y in coords]
+coords = list(zip(x_coords, y_coords))
 
-x_lo = min([x for x,_ in P])
-x_hi = max([x for x,_ in P])
-y_lo = min([y for _,y in P])
-y_hi = max([y for _,y in P])
+def get_shortest_distance(point):
+    distances = [abs(point[0] - coord[0]) + abs(point[1] - coord[1]) for coord in coords]
+    distances = np.array(distances)
+    if sorted(distances)[0] == sorted(distances)[1]:
+        return -1 
+    return distances.argmin() + 1
 
-def d(p1, p2):
-    x, y = p1
-    r, c = p2
-    return abs(x-r) + abs(y-c)
+largest_coord = max(x_coords+y_coords)
+# Create permuations of all coordinates
+perm = itertools.product(list(range(largest_coord)), repeat=2)
+# Store closest coordinate (or -1 if tied)
+distances = [get_shortest_distance(x) for x in perm]
 
-def closest(r, c):
-    best = P[0]
-    xx, yy = best
-    tie = False
-    for p in P[1:]:
-        x, y = p
-        if d((x,y), (r,c)) < d((xx,yy), (r,c)):
-            best = p
-            tie = False
-        elif d((x,y), (r,c)) == d((xx,yy), (r,c)):
-            tie = True
-    if tie:
-        return (-1, 1)
-    else:
-        return best
+grid = np.array(distances).reshape(largest_coord, largest_coord)
+""" NOT WORKING  """
+#plt.figure(figsize=(12,8))
+#plt.title('Visualisation of areas')
+#plt.scatter(x_coords, y_coords, color='r', label='Coordinates')
+#plt.legend()
+#plt.imshow(grid.T)
+#plt.axis('off')
 
+edges = [grid[0], grid[max(x_coords)-1], grid[:,0], grid[:, max(y_coords)-1]]
+np.unique(edges)
 
-score = defaultdict(int)
-for x in range(x_lo, x_hi+1):
-    for y in range(y_lo, y_hi + 1):
-        score[closest(x, y)] += 1
-
-
-is_inf = set()
-for r in range(500):
-    for c in [-5000, 5000]:
-        is_inf.add(closest(r, c))
-
-for c in range(500):
-    for r in [-5000, 5000]:
-        is_inf.add(closest(r, c))
-
-best = None
-for k in score:
-    if k not in is_inf and (best is None or score[k] > score[best]):
-        x, y = k
-        best = (x, y)
-
-ans = score[best]
+unique, count = np.unique(grid, return_counts=True)
+inner_areas = [x for x in sorted(zip(count, unique)) if x[1] not in np.unique(edges)]
+ans, _ = inner_areas[-1]
 print(ans)
 submit(ans, part='a', day=6, year=2018)
 # submit(ans, part='b', day=6, year=2018)
