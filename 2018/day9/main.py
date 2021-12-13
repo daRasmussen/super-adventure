@@ -7,7 +7,7 @@ ppp = data.split(";")[0].split(" ")[0]
 poo = data.split(";")[1].split(" ")[-2]
 
 num_players = int(ppp)
-num_marbles = int(poo)
+num_marbles = int(poo) * 100
 
 marbles = [0]
 current = 0
@@ -23,5 +23,5 @@ for m in range(1, num_marbles):
        marbles = marbles[:current] + [m] + marbles[current:]
 ans = max(score.values())
 print(ans)
-submit(ans, part='a', day=9, year=2018)
-# submit(ans, part='b', day=9, year=2018)
+
+submit(ans, part='b', day=9, year=2018)
