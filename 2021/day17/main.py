@@ -1,89 +1,47 @@
 from aocd import submit, get_data
-
 data = get_data(day=17, year=2021)
-print(data)
 
-# submit(ans, part='a', day=17, year=2021)
-# submit(ans, part='b', day=17, year=2021)
+from fractions import Fraction
+from math import isqrt
 import re
-import numpy as np
-from itertools import repeat
-from typing import Tuple
-
-text_regex = re.compile(r"x=(-*\d+)\.\.(-*\d+), y=(-*\d+)\.\.(-*\d+)")
-coordinates = text_regex.search(data).groups()
-x_min, x_max, y_min, y_max = (int(coord) for coord in coordinates)
-
-def point_collision(x, y, x1=x_min, x2=x_max, y1=y_min, y2=y_max) -> bool:
-    "Whether a point is in the rectangle of vertices (x1, y1) (x2, y2)"
-
-    # Check whether the point is between both vertices of the target area
-    within_x = (x >= x1) and (x <= x2)
-    within_y = (y >= y1) and (y <= y2)
-
-    if within_x and within_y: return True
-    else: return False
-
-def trajectory(x_speed, y_speed, x=0, y=0, x_max=x_max, y_min=y_min) -> Tuple[Tuple[int,int]]:
-    """Returns a list of the (x, y) coordinates in the trajectory."""
+mo = re.match(r"target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)", data)
+x_min, x_max, y_min, y_max = map(int, mo.groups())
+def factors(n):
+    """Naive, slow. Fine for our purposes. Positive factors only.
+    """
+    for d in range(1, abs(n)+1):
+        if abs(n) % d == 0:
+            yield d
+def possible_vy_n(y):
+    """Find all combinations of initial vertical velocity (vy)
+    and number of steps (n) that hit the given y value.
+    """
+    for d in factors(y):
+        if (y//d + 2*d - 1) % 2 == 0:
+            yield (y//d + 2*d - 1) // 2, 2*d
+        if d % 2 == 1:
+            yield (y//d + d//2), d
+def possible_vx(x, n):
+    """Find all possible values for initial horizontal velocity (vx)
+    that hit the given x value after n steps. (There will be either
+    0 or 1 such values.)
+	"""
+    # First see if there is a vx that works with vx > n
+    vx = Fraction(x, n) + Fraction(n-1, 2)
+    if vx.denominator == 1 and vx.numerator > n:
+        yield vx.numerator
     
-    x_coord = [x]
-    y_coord = [y]
-
-    # Move the probe until it goes beyond the target area
-    while x <= x_max and y >= y_min:
-        x += x_speed
-        y += y_speed
-        x_coord += [x]
-        y_coord += [y]
-        x_speed = max(0, x_speed-1)
-        y_speed -= 1
-    
-    return (x_coord, y_coord)
-
-def check_trajectory(x_speed, y_speed, x=0, y=0, x1=x_min, x2=x_max, y1=y_min, y2=y_max) -> bool:
-    """Whether a trajectory hits the target area,"""
-
-    # Get the (x, y) coordinates of all points in the trajectory
-    x_path, y_path = trajectory(x_speed, y_speed, x, y, x2, y1)
-
-    # Check if any of those points is inside the target area
-    hit_target = any(
-        map(
-            point_collision,
-            x_path,
-            y_path,
-            repeat(x1),
-            repeat(x2),
-            repeat(y1),
-            repeat(y2)
-        )
-    )
-    
-    if hit_target:
-        # Return the initial speeds if the trajectory hits the target area
-        return (x_speed, y_speed)
-    else:
-        return None
-
-# Get the speeds between x_speed [0, 250) and y_speed [-250, 250)
-x_range = np.arange(0, 250)
-y_range = np.arange(-250, 250)
-
-# All combinations of (x_speed, y_speed) within the ranges
-x_mesh, y_mesh = np.meshgrid(x_range, y_range)
-
-# Test all those combinations if they hit
-print("This might take around 10 seconds. Please be patient...")
-launch_tests = map(check_trajectory, x_mesh.ravel(), y_mesh.ravel())
-successes = [hit for hit in launch_tests if hit]
-
-# Trajectory that got the highest y
-max_x_speed, max_y_speed = max(successes, key = lambda f: f[1])
-x_path, y_path = trajectory(max_x_speed, max_y_speed)
-max_height = max(y_path)
-print(f"Part 1: {max_height}")
-ans=max_height
-submit(ans, part='a', day=17, year=2021)
-# submit(ans, part='b', day=17, year=2021)
-
+    # If x is the r'th triangular number, and n ≥ r, we can have vx = r
+    discriminant = 8*x + 1
+    root = isqrt(discriminant)
+    if discriminant == root**2 and root % 2 == 1:
+        r = (root - 1) // 2
+        if n >= r: yield r
+ans = len({
+    (vx, vy)
+    for x in range(x_min, x_max + 1)
+    for y in range(y_min, y_max + 1)
+    for (vy, n) in possible_vy_n(y)
+    for vx in possible_vx(x, n)
+})
+submit(ans, part='b', day=17, year=2021)
