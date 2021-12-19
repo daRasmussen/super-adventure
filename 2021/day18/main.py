@@ -102,5 +102,17 @@ if __name__ == '__main__':
         s_number.reduce()
 
     ans = s_number.magnitude()
-    submit(ans, part='a', day=18, year=2021)
+    # submit(ans, part='a', day=18, year=2021)
+
+    #Part 2
+    max_magnitude = 0
+    for left in numbers_to_add:
+        for right in numbers_to_add:
+            a = SnailfishNumber(left)+right
+            a.reduce()
+            max_magnitude = max(max_magnitude, int(a.magnitude()))
+
+    ans = max_magnitude
+    print(ans)
+    submit(ans, part='b', day=18, year=2021)
 
