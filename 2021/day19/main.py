@@ -80,10 +80,9 @@ def p2(f):
         for a, b in itertools.product(range(len(fo)), repeat=2)
     )
 
-ans = p1(data)
+ans = p2(data)
 print(ans)
-submit(ans, part='a', day=19, year=2021)
-# submit(ans, part='b', day=19, year=2021)
+submit(ans, part='b', day=19, year=2021)
 
 
 
