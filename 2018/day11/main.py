@@ -9,14 +9,18 @@ grid *= rack_id
 grid %= 1000
 grid //= 100
 grid -= 5
+
 X = np.zeros((301, 301))
-# Each cell is the sum of every top left grid cell
-X[1:, 1:] = grid.cumsum(axis=0).cumsum(axis=1) 
-size = 3
-# Each cell is the sum of the size x size square
-tmp = X[size:, size:] + X[:-size, :-size] - X[size:, :-size] - X[:-size, size:] 
-x, y = np.unravel_index(tmp.argmax(), tmp.shape)
-ans = "{},{}".format(x+1, y+1)
+X[1:, 1:] = grid.cumsum(axis=0).cumsum(axis=1)
+
+maximum = 0
+ret = (None, None, None)
+for size in range(1, 301):
+    tmp = X[size:, size:] + X[:-size, :-size] - X[size:, :-size] - X[:-size, size:]
+    if tmp.max() > maximum:
+        maximum = tmp.max()
+        x, y = np.unravel_index(tmp.argmax(), tmp.shape)
+        ret = (x+1, y+1, size)
+ans = "{},{},{}".format(*ret)
 print(ans)
-submit(ans, part='a', day=11, year=2018)
-# submit(ans, part='b', day=11, year=2018)
+submit(ans, part='b', day=11, year=2018)
