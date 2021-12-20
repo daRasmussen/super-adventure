@@ -2,7 +2,6 @@ from aocd import submit, get_data
 
 data = get_data(day=17, year=2018)
 ans = ''
-
 import numpy as np
 
 
@@ -15,7 +14,6 @@ def print_grid(grid):
         print()
     print("************ END ***********")
     print()
-
 
 lines = data.splitlines()
 clays = []
@@ -42,6 +40,7 @@ for line in lines:
         max_x = max(max_x, width_pos)
         min_y = min(min_y, length_from, length_to)
         min_x = min(min_x, width_pos)
+
 grid = np.zeros((max_y + 2, max_x + 2))
 for width_pos, length_dir, length_from, length_to in clays:
     if length_dir == "x":
@@ -80,7 +79,6 @@ while len(stack):
         if grid[y + 1][fill_right] == 0:
             stack.append((y, fill_right))
 
-        ans = np.sum(grid[min_y : max_y + 1, :] >= 2)
+ans = np.sum(grid[min_y : max_y + 1, :] == 3)
 print(ans)
-submit(ans, part='a', day=17, year=2018)
-# submit(ans, part='b', day=17, year=2018)
+submit(ans, part='b', day=17, year=2018)
