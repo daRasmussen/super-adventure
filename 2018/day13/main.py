@@ -62,18 +62,28 @@ def turn_cart(cart: Cart, part: str):
         cart.direction *= -1j * 1j ** cart.cross_mod  # rotate left, forward, or right
         cart.cross_mod = (cart.cross_mod + 1) % 3
 
-
-def solve_a(input_file_lines: List[str]) -> str:
+def solve_b(input_file_lines: List[str]) -> str:
     tracks, carts = setup(input_file_lines)
-    while True:
+    while len(carts) > 1:
         carts.sort(key=lambda c: (c.position.imag, c.position.real))
         for ci, cart in enumerate(carts):
+            if cart.dead:
+                continue
             cart.position += cart.direction
-            if any(c2.position == cart.position for c2i, c2 in enumerate(carts) if c2i != ci):
-                return str(int(cart.position.real)) + "," + str(int(cart.position.imag))
-                # 14, 42
+            for ci2, cart2 in enumerate(carts):
+                if ci != ci2 and cart.position == cart2.position and not cart2.dead:
+                    cart.dead = True
+                    cart2.dead = True
+                    break
+            if cart.dead:
+                continue
             part = tracks[cart.position]
             turn_cart(cart, part)
-ans = solve_a(data.splitlines())
-submit(ans, part='a', day=13, year=2018)
-# submit(ans, part='b', day=13, year=2018)
+        carts = [c for c in carts if not c.dead]
+    if not carts:
+        return "ERROR: there's an even number of carts, there's isn't 1 cart left at the end!"
+    cart = carts[0]
+    return str(int(cart.position.real)) + "," + str(int(cart.position.imag))
+ans = solve_b(data.splitlines())
+print(ans)
+submit(ans, part='b', day=13, year=2018)
