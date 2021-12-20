@@ -121,8 +121,13 @@ class Grid(dict):
 
 lines = data.splitlines()
 
-grid = Grid(lines)
-ans = grid.play()
-print(ans)
-submit(ans, part='a', day=15, year=2018)
-# submit(ans, part='b', day=15, year=2018)
+for power in itertools.count(4):
+    try:
+        outcome = Grid(lines, power).play(elf_death=True)
+    except ElfDied:
+        continue
+    else:
+        ans = outcome
+        print(ans)
+        submit(ans, part='b', day=15, year=2018)
+        break
