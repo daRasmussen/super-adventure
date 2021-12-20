@@ -10,6 +10,8 @@ def string_to_list(s):
 def list_to_string(l):
     return "".join(["#" if x else "." for x in l])
 
+
+NB_GEN = 50000000000
 lines = data.splitlines()
 garden1 = lines[0].split()[2]
 garden1 = string_to_list(garden1)
@@ -21,7 +23,8 @@ for i in range(2, len(lines)):
     before, after = lines[i].split(" => ")
     patterns[before] = int(after == "#")
 
-for gen in range(20):
+for gen in range(NB_GEN):
+    prev_offset = offset
     previous = [0] * 5 + previous + [0] * 5
     current = [0] * 5 + current + [0] * 5
     offset += 5
@@ -33,12 +36,17 @@ for gen in range(20):
     current = np.trim_zeros(current, "f")
     offset -= len(previous) - len(current)
     current = np.trim_zeros(current, "b")
+    previous = np.trim_zeros(previous)
+    if np.array_equal(previous, current):
+        diff_offset = offset - prev_offset
+        offset += diff_offset * (NB_GEN - gen - 1)
+        break
     previous = list(current)
+
 res = 0
 for i in range(len(current)):
     if current[i]:
         res += i - offset
 ans = res
 print(ans)
-submit(ans, part='a', day=12, year=2018)
-# submit(ans, part='b', day=12, year=2018)
+submit(ans, part='b', day=12, year=2018)
