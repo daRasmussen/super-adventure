@@ -162,7 +162,6 @@ def parse_input_file(s):
     return s.splitlines()
 
 l = parse_input_file(data)
-ans = problem1(l)
+ans = problem2(l)
 print(ans)
-submit(ans, part='a', day=16, year=2018)
-# submit(ans, part='b', day=16, year=2018)
+submit(ans, part='b', day=16, year=2018)
