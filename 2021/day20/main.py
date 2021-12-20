@@ -57,7 +57,6 @@ for t in range(50):
   if t==2:
       ans = len(G)
   G = step(G, t%2==0)
-
+ans = len(G)
 print(ans)
-submit(ans, part='a', day=20, year=2021)
-# submit(ans, part='b', day=20, year=2021)
+submit(ans, part='b', day=20, year=2021)
