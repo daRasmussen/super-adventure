@@ -1,5 +1,5 @@
 import re
-from aocd import get_data
+from aocd import get_data, submit
 
 data = get_data(day=10, year=2018)
 
@@ -13,16 +13,15 @@ class Point():
         self.pos_x += self.vel_x
         self.pos_y += self.vel_y
 
-
 HEIGHT = 10
-WIDTH = 62
-
 def run(s):
     points = []
 
     for line in s.split("\n"):
         (pos_x, pos_y, vel_x, vel_y) = re.findall(r"-?\d+", line)
         points.append(Point(int(pos_x), int(pos_y), int(vel_x), int(vel_y)))
+
+    seconds = 0
 
     while True:
         y = []
@@ -31,27 +30,10 @@ def run(s):
             point.step()
             y.append(point.pos_y)
 
+        seconds += 1
+
         if max(y) - min(y) <= HEIGHT:
-            return pprint(points)
-
-def pprint(points):
-    min_x = min(p.pos_x for p in points)
-    min_y = min(p.pos_y for p in points)
-    img = [[False for _ in range(HEIGHT)] for _ in range(WIDTH)]
-    for p in points:
-        img[p.pos_x - min_x][p.pos_y - min_y] = True
-
-    result = ""
-
-    for i in range(HEIGHT):
-        for j in range(WIDTH):
-            if img[j][i]:
-                result += "#"
-            else:
-                result += "."
-        result += "\n"
-
-    return result
-print(run(data))
-# submit(ans, part='a', day=10, year=2018)
-# submit(ans, part='b', day=10, year=2018)
+            return seconds
+ans = run(data)
+print(ans)
+submit(ans, part='b', day=10, year=2018)
