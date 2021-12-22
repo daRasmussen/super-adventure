@@ -23,7 +23,6 @@ for c in f[1:-2]:
   d[x,y]=min(d[x,y],d[px,py]+1) if d[x,y] else d[px,py]+1
  px,py=x,y
 dv=d.values()
-ans = max(dv)
+ans = len([x for x in dv if x>=1000])
 print(ans)
-submit(ans, part='a', day=20, year=2018)
-# submit(ans, part='b', day=20, year=2018)
+submit(ans, part='b', day=20, year=2018)
