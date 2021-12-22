@@ -85,7 +85,6 @@ for state,x1,x2,y1,y2,z1,z2 in cubes:
                 for k in range(max(-50, z1), min(50, z2)+1):
                     p1 += 1
         p2 += abs(x2-x1+1) * abs(y2-y1+1) * abs(z2-z1+1)
-ans = p1
+ans = p2
 print(ans)
-submit(ans, part='a', day=22, year=2021)
-# submit(ans, part='b', day=22, year=2021)
+submit(ans, part='b', day=22, year=2021)
