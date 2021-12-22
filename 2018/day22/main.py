@@ -57,7 +57,8 @@ def dijkstra(grid, corner, target):
 
 depth, target = get_cave()
 grid = generate_grid(depth, target)
-ans = sum([v[2] for v in grid.values()])
+corner = (target[0] + 100, target[1] + 100)
+grid = {c: v[2] for c, v in (generate_grid(depth, corner)).items()}
+ans =  dijkstra(grid, corner, target)
 print(ans)
-submit(ans, part='a', day=22, year=2018)
-# submit(ans, part='b', day=22, year=2018)
+submit(ans, part='b', day=22, year=2018)
