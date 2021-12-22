@@ -30,7 +30,6 @@ def run_activation_system(magic_number, is_part_1):
 
 
 magic_number = int(data.splitlines()[8].split()[1])
-ans = run_activation_system(magic_number, True)
+ans = run_activation_system(magic_number, False)
 print(ans)
-submit(ans, part='a', day=21, year=2018)
-# submit(ans, part='b', day=21, year=2018)
+submit(ans, part='b', day=21, year=2018)
