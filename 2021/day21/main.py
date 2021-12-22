@@ -1,5 +1,6 @@
 from aocd import submit, get_data
-from typing import List, Tuple
+from collections import defaultdict, Counter
+from typing import List, Tuple, Dict
 
 data = get_data(day=21, year=2021)
 ans = None
@@ -53,9 +54,41 @@ def simulate_deterministic(p1_start: int, p2_start: int, target: int = 1000) -> 
         losing_score = find_score_at_turn(p2_winning_turn, p1_cycle)
         total_rolls = 6 * p2_winning_turn
     return losing_score * total_rolls
+
+def generate_rolls(dice: int, sides: int) -> Dict[int, int]:
+    possible_rolls = [()]
+    for _ in range(dice):
+        possible_rolls = [(i, *j) for i in range(1, sides + 1) for j in possible_rolls]
+    possible_rolls = Counter([sum(i) for i in possible_rolls])
+    return possible_rolls
+
+def simulate_dirac(p1_start: int, p2_start: int, spaces: int = 10,
+                   dice: int = 3, sides: int = 3, target: int = 21) -> int:
+    possible_rolls = generate_rolls(dice, sides)
+    p1_wins = p2_wins = 0
  
+    states = {(p1_start, p2_start, 0, 0): 1}
+    while states:
+        new_states = defaultdict(int)
+        for (p1_pos, p2_pos, p1_score, p2_score), count in states.items():
+            for p1_roll in possible_rolls:
+                new_p1_pos = ((p1_pos + p1_roll - 1) % spaces) + 1
+                new_p1_score = p1_score + new_p1_pos
+                if new_p1_score >= target:
+                    p1_wins += count * possible_rolls[p1_roll]
+                else:
+                    for p2_roll in possible_rolls:
+                        new_p2_pos = ((p2_pos + p2_roll - 1) % spaces) + 1
+                        new_p2_score = p2_score + new_p2_pos
+                        if new_p2_score >= target:
+                            p2_wins += count * possible_rolls[p1_roll] * possible_rolls[p2_roll]
+                        else:
+                            new_states[new_p1_pos, new_p2_pos, new_p1_score, new_p2_score] += \
+                                count * possible_rolls[p1_roll] * possible_rolls[p2_roll]
+        states = new_states
+    return max([p1_wins, p2_wins])
+
 p1_start, p2_start = load_data()
-ans = simulate_deterministic(p1_start, p2_start)
+ans = simulate_dirac(p1_start, p2_start)
 print(ans)
-submit(ans, part='a', day=21, year=2021)
-# submit(ans, part='b', day=21, year=2021)
+submit(ans, part='b', day=21, year=2021)
