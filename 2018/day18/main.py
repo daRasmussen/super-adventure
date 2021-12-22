@@ -75,7 +75,6 @@ def get_resource_value(lines, num_minutes):
 
 
 lines = [list(map(str, line.strip())) for line in data.splitlines()]
-ans = get_resource_value(lines, 10)
+ans = get_resource_value(lines, 1000000000)
 print(ans)
-submit(ans, part='a', day=18, year=2018)
-# submit(ans, part='b', day=18, year=2018)
+submit(ans, part='b', day=18, year=2018)
