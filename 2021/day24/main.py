@@ -124,8 +124,7 @@ def read_input() -> List[Function]:
 
 functions = read_input()
 CACHE = {}
-model = find_model(functions, 0, 0, 0)
+model = find_model(functions, 0, 0, 0, True)
 ans = model
 print(ans)
-submit(ans, part='a', day=24, year=2021)
-# submit(ans, part='b', day=24, year=2021)
+submit(ans, part='b', day=24, year=2021)
