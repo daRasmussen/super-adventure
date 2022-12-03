@@ -1,35 +1,18 @@
-with open("data.txt") as f:
-    d = f.readlines()
-    instructions = [x.strip() for x in d]
+X = [l.strip() for l in open('data.txt')]
+p1 = 0
+p2 = 0
+for x in X:
+    op,me = x.split()
+    p1 += {'X': 1, 'Y': 2, 'Z': 3}[me]
+    p1 += {('A', 'X'): 3, ('A', 'Y'): 6, ('A', 'Z'): 0,
+            ('B', 'X'): 0, ('B', 'Y'): 3, ('B', 'Z'): 6,
+            ('C', 'X'): 6, ('C', 'Y'): 0, ('C', 'Z'): 3,
+            }[(op, me)]
 
-pos = 0
-dep = 0
-for instruction in instructions:
-    cmd, val = instruction.split(" ")
-    val = int(val)
-    if cmd == "forward":
-        pos += val
-    if cmd == "down":
-        dep += val
-    if cmd == "up":
-        dep -= val
-print(pos * dep)
-
-# part 2
-aim = 0
-pos = 0
-dep = 0
-for instruction in instructions:
-    cmd, val = instruction.split(" ")
-    val = int(val)
-    if cmd == "forward":
-        pos += val
-        dep += aim * val
-    if cmd == "down":
-        aim += val
-    if cmd == "up":
-        aim -= val
-print(pos * dep)
-
-
-
+    p2 += {'X': 0, 'Y': 3, 'Z': 6}[me]
+    p2 += {('A', 'X'): 3, ('A', 'Y'): 1, ('A', 'Z'): 2,
+            ('B', 'X'): 1, ('B', 'Y'): 2, ('B', 'Z'): 3,
+            ('C', 'X'): 2, ('C', 'Y'): 3, ('C', 'Z'): 1,
+            }[(op, me)]
+print(p1)
+print(p2)
