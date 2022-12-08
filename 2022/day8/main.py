@@ -1,49 +1,57 @@
-from aocd import get_data, submit
+#!/usr/bin/python3
+import sys
 from collections import defaultdict
-import itertools
+infile = sys.argv[1] if len(sys.argv)>1 else 'data.txt'
+data = open(infile).read().strip()
+lines = [x for x in data.split('\n')]
 
-data = get_data(day=8, year=2021).split("\n")
-ans = 0
-for line in data:
-    before, after = line.split("|")
-    before = before.split()
-    after = after.split()
+G = []
+for line in lines:
+    row = line
+    G.append(row)
 
-    digits = {
-        0: "abcefg",
-        1: "cf",
-        2: "acdeg",
-        3: "acdfg",
-        4: "bcdf",
-        5: "abdfg",
-        6: "abdefg",
-        7: "acf",
-        8: "abcdefg",
-        9: "abcdfg"
-    }
-    for perm in itertools.permutations(list(range(8))):
-        ok = True
-        D = {}
-        for i in range(8):
-            D[chr(ord("a")+i)] = chr(ord("a")+perm[i])
-        for w in before:
-            w_perm = ""
-            for c in w:
-                w_perm += D[c]
-            w_perm = "".join(sorted(w_perm))
-            if w_perm not in digits.values():
-                ok = False
-        if ok:
-            ret = ""
-            print("GOT")
-            for w in after:
-                w_perm = ""
-                for c in w:
-                    w_perm += D[c]
-                w_perm = "".join(sorted(w_perm))
-                d = [k for k,v in digits.items() if v == w_perm]
-                ret += str(d[0])
-            print(ret)
-            ans += int(ret)
-submit(ans, part="b", day=8, year=2021)
+DIR = [(-1,0),(0,1),(1,0),(0,-1)]
+R = len(G)
+C = len(G[0])
 
+p1 = 0
+for r in range(R):
+    for c in range(C):
+        vis = False
+        for (dr,dc) in DIR:
+            rr = r
+            cc = c
+            ok = True
+            while True:
+                rr += dr
+                cc += dc
+                if not (0<=rr<R and 0<=cc<C):
+                    break
+                if G[rr][cc] >= G[r][c]:
+                    ok = False
+            if ok:
+                vis = True
+        if vis:
+            p1 += 1
+print(p1)
+
+p2 = 0
+for r in range(R):
+    for c in range(C):
+        score = 1
+        for (dr,dc) in DIR:
+            dist = 1
+            rr = r+dr
+            cc = c+dc
+            while True:
+                if not (0<=rr<R and 0<=cc<C):
+                    dist -= 1
+                    break
+                if G[rr][cc]>=G[r][c]:
+                    break
+                dist += 1
+                rr += dr
+                cc += dc
+            score *= dist
+        p2 = max(p2, score)
+print(p2)
